@@ -100,8 +100,8 @@ button {
 
 .plate-back .rank {
     position: absolute;
-    padding-top: 28vh;
-    padding-bottom: 25vh;
+    padding-top: 6vh;
+    padding-bottom: 0vh;
     font-family: "Aldrich", serif;
     font-size: 33vh;
     color: rgba(255, 255, 255, 0.85);
