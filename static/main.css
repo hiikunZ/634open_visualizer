@@ -282,6 +282,7 @@ button {
     flex-wrap: nowrap;
     padding-left: 2vw;
     padding-right: 1vw;
+    padding-bottom: 1vw;
     font-size: 10vh;
     background-color: rgba(0, 0, 0, 0.5);
     color: rgba(232, 255, 27, 0.95);
