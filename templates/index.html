@@ -457,9 +457,9 @@
                                 doc.children[0].classList.remove(doc.children[0].classList[1]);
                                 doc.classList.remove('card-5o2x-1x');
                                 doc.classList.add('card-5o2x-2x');
-                                new TWEEN.Tween(obj2.rotation).to({ x: -0.5 * Math.PI }, 700).easing(TWEEN.Easing.Circular.In).onComplete(function () {
+                                new TWEEN.Tween(obj2.rotation).to({ x: 0.5 * Math.PI }, 700).easing(TWEEN.Easing.Circular.In).onComplete(function () {
                                     doc2.textContent = "Lose";
-                                    obj2.rotation.x = 0.5 * Math.PI;
+                                    obj2.rotation.x = -0.5 * Math.PI;
                                     const b2 = new TWEEN.Tween(obj2.rotation).to({ x: 0 }, 700).easing(TWEEN.Easing.Circular.Out);
 
                                     doc2.classList.remove('subcard-5o2x-0-3o');
