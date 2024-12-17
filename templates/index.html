@@ -128,7 +128,6 @@
 
 
                 const object = new CSS3DObject(plate);
-                object.rotation.x = Math.PI * 1;
                 if (platedata.length == 1) object.position.y = 0;
                 else if (platedata.length == 2) object.position.y = (i * -60 + 30) * vh;
                 else if (platedata.length == 3) object.position.y = (i * -60 + 60) * vh;
@@ -188,15 +187,16 @@
                 const object = plate_objs[i];
                 const doc = plate_docs[i];
                 const a1 = new TWEEN.Tween(object.rotation)
-                    .to({ x: object.rotation.x + Math.PI * 0.5 }, 1500)
+                    .to({ x: 0.5 * Math.PI }, 1500)
                     .easing(TWEEN.Easing.Circular.In
                     )
                     .onComplete(function () {
+                        object.rotation.x = -0.5 * Math.PI;
                         doc.classList.toggle('plate-back');
                         doc.classList.toggle('plate-front');
                     });
                 const a2 = new TWEEN.Tween(object.rotation)
-                    .to({ x: object.rotation.x + Math.PI * 1.0 }, 1500)
+                    .to({ x: 0 }, 1500)
                     .easing(TWEEN.Easing.Circular.Out
                     );
                 a1.chain(a2);

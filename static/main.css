@@ -26,7 +26,7 @@ button {
     cursor: default;
     display: flex;
     justify-content: center;
-    align-items: flex-end;
+    align-items: center;
 }
 
 .plate-red {
@@ -99,11 +99,11 @@ button {
 
 
 .plate-back .rank {
-    position: absolute;    
+    position: absolute;
+    height: 37vh;
     font-family: "Aldrich", serif;
     font-size: 33vh;
     color: rgba(255, 255, 255, 0.85);
-    transform: rotateX(180deg);
 }
 
 .plate-front .rank {
