@@ -1,0 +1,62 @@
+from flask import Flask, render_template, request
+from flask_socketio import SocketIO
+
+app = Flask(__name__)
+app.config["SECRET_KEY"] = "quiz634"
+app._static_folder = "static"
+
+
+socketio = SocketIO(app)
+
+
+@app.route("/")
+def index():
+    return render_template("index.html")
+
+
+@app.route("/control")
+def control():
+    return render_template("control.html")
+
+
+@app.route("/api/show_plate", methods=["POST"])
+def show_plate():
+    data = request.json["data"]
+    socketio.emit("show_plate", data)
+    return "OK"
+
+
+@app.route("/api/flip_plate", methods=["POST"])
+def flip_plate():
+    socketio.emit("flip_plate", {})
+    return "OK"
+
+
+@app.route("/api/delete_plate", methods=["POST"])
+def delete_plate():
+    socketio.emit("delete_plate", {})
+    return "OK"
+
+
+@app.route("/api/prepare_5o2x", methods=["POST"])
+def prepare_5o2x():
+    data = request.json["data"]
+    socketio.emit("prepare_5o2x", data)
+    return "OK"
+
+
+@app.route("/api/update_5o2x", methods=["POST"])
+def update_5o2x():
+    data = request.json["data"]
+    socketio.emit("update_5o2x", data)
+    return "OK"
+
+
+@app.route("/api/delete_5o2x", methods=["POST"])
+def delete_5o2x():
+    socketio.emit("update_5o2x", {})
+    return "OK"
+
+
+if __name__ == "__main__":
+    socketio.run(app, host="0.0.0.0", port=7000, debug=True)

@@ -1,0 +1,295 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    background-color: black;
+
+}
+
+* {
+    font-feature-settings: "palt";
+    font-family: "Noto Sans JP", serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+}
+
+button {
+    z-index: 100;
+}
+
+
+.plate {
+    width: 96vh;
+    height: 36vh;
+    text-align: center;
+    line-height: normal;
+    cursor: default;
+}
+
+.plate-red {
+    border: 0.6vh solid rgba(255, 0, 0, 0.25);
+    background-color: rgba(127, 0, 0, 0.5);
+    box-shadow: 0vh 0vh 4.5vh 1.5vh rgba(255, 0, 0, 0.7);
+}
+
+.plate-red>* {
+    text-shadow: 0 0 3vh rgba(255, 0, 0, 0.9);
+}
+
+.plate-blue {
+    border: 0.6vh solid rgba(0, 0, 255, 0.25);
+    background-color: rgba(0, 0, 127, 0.5);
+    box-shadow: 0vh 0vh 4.5vh 1.5vh rgba(0, 0, 255, 0.7);
+}
+
+.plate-blue>* {
+    text-shadow: 0 0 3vh rgba(0, 0, 255, 0.9);
+}
+
+.plate-yellow {
+    border: 0.6vh solid rgba(255, 255, 0, 0.25);
+    background-color: rgba(127, 127, 0, 0.5);
+    box-shadow: 0vh 0vh 4.5vh 1.5vh rgba(255, 255, 0, 0.7);
+}
+
+.plate-yellow>* {
+    text-shadow: 0 0 3vh rgba(255, 255, 0, 0.9);
+}
+
+.plate-green {
+    border: 0.6vh solid rgba(0, 255, 0, 0.25);
+    background-color: rgba(0, 127, 0, 0.5);
+    box-shadow: 0vh 0vh 4.5vh 1.5vh rgba(0, 255, 0, 0.7);
+}
+
+.plate-green>* {
+    text-shadow: 0 0 3vh rgba(0, 255, 0, 0.9);
+}
+
+.plate-front .name {
+    position: absolute;
+    top: 9.6vh;
+    bottom: 0vh;
+    left: 0vh;
+    right: 0vh;
+    font-size: 18vh;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.plate-front .name-small {
+    position: absolute;
+    top: 11.4vh;
+    bottom: 0vh;
+    left: 0vh;
+    right: 0vh;
+    font-size: 15vh;
+    color: rgba(240, 230, 230, 0.85);
+}
+
+.plate-back .name {
+    display: none;
+}
+
+.plate-back .name-small {
+    display: none;
+}
+
+
+.plate-back .rank {
+    position: absolute;
+    bottom: 0vh;
+    left: 0vh;
+    right: 0vh;
+    font-family: "Aldrich", serif;
+    font-size: 33vh;
+    color: rgba(255, 255, 255, 0.85);
+    transform: rotateX(180deg);
+}
+
+.plate-front .rank {
+    display: none;
+}
+
+.plate-front .affiliation {
+    position: absolute;
+    top: 1.5vh;
+    left: 3vh;
+    font-size: 6vh;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.plate-back .affiliation {
+    display: none;
+}
+
+.card-5o2x {
+    width: 14vw;
+    height: 87vh;
+    text-align: center;
+    line-height: normal;
+    cursor: default;
+}
+
+.card-5o2x-0x {
+    box-shadow: 0vw 0vw 0.45vw 0.45vw rgba(0, 180, 255, 0.7);
+}
+
+.card-5o2x-1x {
+    box-shadow: 0vw 0vw 0.45vw 0.45vw rgba(255, 0, 0, 0.7);
+}
+
+.card-5o2x-2x {
+    box-shadow: 0vw 0vw 0.45vw 0.45vw rgba(200, 200, 200, 0.7);
+}
+
+.card-5o2x-5o {
+    box-shadow: 0vw 0vw 0.45vw 0.45vw rgba(255, 255, 0, 0.7);
+}
+
+.card-5o2x .name {
+    padding: 1.5vh 0vh;
+    height: 72vh;
+    display: inline-block;
+    color: rgba(255, 255, 255, 0.95);
+    writing-mode: vertical-rl;
+    text-align-last: justify;
+    white-space: nowrap;
+}
+
+.card-5o2x .count-1-4 {
+    font-size: min(17vh, 9.6vw);
+}
+
+.card-5o2x .count-5 {
+    font-size: min(14.4vh, 9.6vw);
+}
+
+.card-5o2x .count-6 {
+    font-size: 12vh;
+}
+
+.card-5o2x .rank {
+    padding-top: 1vh;
+    font-size: 7vh;
+    font-family: "Aldrich", serif;
+    color: rgba(226, 226, 226, 1);
+}
+
+.card-5o2x .rank-red {
+    text-shadow: 0 0 15px rgba(255, 0, 0, 1.0);
+}
+
+.card-5o2x .rank-blue {
+    text-shadow: 0 0 15px rgba(0, 0, 255, 1.0);
+}
+
+.card-5o2x .rank-yellow {
+    text-shadow: 0 0 15px rgba(255, 255, 0, 1.0);
+}
+
+.card-5o2x .rank-green {
+    text-shadow: 0 0 15px rgba(0, 255, 0, 1.0);
+}
+
+.subcard-5o2x {
+    width: 14vw;
+    height: 15vh;
+    line-height: 16.2vh;
+    text-align: center;
+    cursor: default;
+}
+
+.subcard-5o2x-0-3o {
+    background-color: rgba(165, 204, 255, 0.2);
+    box-shadow: 0vw 0vw 0.45vw 0.45vw rgba(200, 238, 255, 0.7);
+    font-family: "Aldrich", serif;
+    font-size: 12vh;
+    color: rgba(255, 255, 255, 1);
+}
+
+.subcard-5o2x-4o {
+    background-color: rgba(165, 204, 255, 0.2);
+    box-shadow: 0vw 0vw 0.45vw 0.45vw rgba(106, 199, 241, 0.7);
+    font-family: "Aldrich", serif;
+    font-size: 12vh;
+    color: rgba(255, 255, 255, 1);
+}
+
+.subcard-5o2x-5o {
+    background-color: rgba(255, 255, 127, 0.2);
+    box-shadow: 0vw 0vw 0.45vw 0.45vw rgba(255, 255, 0, 0.7);
+    font-family: "Aldrich", serif;
+    font-size: 12vh;
+    color: rgba(255, 255, 255, 1);
+}
+
+.subcard-5o2x-2x {
+    background-color: rgba(139, 139, 139, 0.2);
+    box-shadow: 0vw 0vw 0.45vw 0.45vw rgba(119, 119, 119, 0.7);
+    font-family: "Aldrich", serif;
+    font-size: 10vh;
+    color: rgba(255, 255, 255, 1);
+}
+
+.batsu::before,
+.batsu::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 1vw;
+    height: 7.5vw;
+    background-color: rgb(211, 0, 0);
+}
+
+.batsu::before {
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.batsu::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.mondai-5o2x {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    width: 190vw;
+    height: 63vh;
+    font-size: 10vh;
+    color: white;
+    box-shadow: 0vw 0vw 0.45vw 0.45vw rgba(255, 255, 255, 0.95);
+}
+
+.mondai-5o2x .q {
+    display: flex;
+    justify-content: flex-start;
+    align-content: space-between;
+    flex-wrap: nowrap;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    font-size: 10vh;
+    line-height: 14vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: rgba(255, 255, 255, 0.95);
+}
+
+.mondai-5o2x .a {
+    display: flex;
+    justify-content: flex-start;
+    align-content: space-between;
+    flex-wrap: nowrap;
+    padding-left: 2vw;
+    padding-right: 1vw;
+    font-size: 10vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: rgba(232, 255, 27, 0.95);
+}
+
+.mondai-5o2x .q .qarea {
+    padding-left: 0.5vw;
+}
+
+.mondai-5o2x .a .aarea {
+    padding-left: 0.5vw;
+}

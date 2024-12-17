@@ -1,0 +1,36 @@
+blockquote {
+    font-style: normal;
+    height: 10vh;
+}
+
+.panels {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.panel {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 15%;
+    font-weight: bold;
+    padding-left: 1%;
+    margin-bottom: 1%;
+}
+
+.maru-button {
+    background-color: rgb(255, 127, 127);
+    width: 90%;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.batsu-button {
+    background-color: rgb(127, 127, 255);
+    width: 90%;
+    padding-left: 0;
+    padding-right: 0;
+}

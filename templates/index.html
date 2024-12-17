@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>得点表示</title>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1">
+    <link rel="preload" as="font" href="/static/Aldrich-Regular.woff2" crossorigin>
+    <link rel="preload" as="font" href="/static/NotoSansJP-Bold.woff2" crossorigin>
+
+    <style>
+        @font-face {
+            font-family: 'Aldrich';
+            font-style: normal;
+            font-weight: 600;
+            font-display: swap;
+            src: url('/static/Aldrich-Regular.woff2') format('woff2'),
+                url('/static/Aldrich-Regular.woff') format('woff');
+        }
+
+        @font-face {
+            font-family: 'Noto Sans JP';
+            font-style: normal;
+            font-weight: 600;
+            font-display: swap;
+            src: url('/static/NotoSansJP-Bold.woff2') format('woff2'),
+                url('/static/NotoSansJP-Bold.woff') format('woff');
+        }
+    </style>
+    <link rel="stylesheet" href="/static/main.css" />
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"
+        integrity="sha384-mkQ3/7FUtcGyoppY6bz/PORYoGqOl7/aSUMn2ymDOJcapfS6PHqxhRTMh1RR0Q6+"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+
+    <script type="importmap">
+            {
+                "imports": {
+                    "three": "https://cdn.jsdelivr.net/npm/three@latest/build/three.module.js",
+                    "three/addons/": "https://cdn.jsdelivr.net/npm/three@latest/examples/jsm/"
+                }
+            }
+        </script>
+
+    <script type="module">
+
+        import * as THREE from 'three';
+
+        import TWEEN from 'three/addons/libs/tween.module.js';
+        import { TrackballControls } from 'three/addons/controls/TrackballControls.js';
+        import { CSS3DRenderer, CSS3DObject } from 'three/addons/renderers/CSS3DRenderer.js';
+
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        const vh = height / 100;
+        const vw = width / 100;
+        console.log(vh, vw);
+        let camera, scene, renderer;
+        let controls;
+
+        scene = new THREE.Scene();
+
+        const plate_docs = [];
+        const plate_objs = [];
+        const subplate_docs = [];
+        const subplate_objs = [];
+        var qarea, aarea;
+
+
+        // camera = new THREE.OrthographicCamera(width, -width, height, -height, 0, 1000);
+        camera = new THREE.PerspectiveCamera(30, width / height, 1, 1000);
+        camera.position.z = height * 3.65;
+        camera.lookAt(scene.position);
+
+        renderer = new CSS3DRenderer();
+        renderer.setSize(width, height);
+        renderer.domElement.style.position = 'absolute';
+        renderer.domElement.style.top = 0;
+        document.body.appendChild(renderer.domElement);
+
+
+        function animate() {
+            requestAnimationFrame(animate);
+            TWEEN.update();
+        }
+
+        animate();
+
+        function render() {
+            renderer.render(scene, camera);
+        }
+
+        render();
+
+
+
+        function show_plate(platedata) {
+            for (let i = 0; i < platedata.length; i++) {
+                const plate = document.createElement('div');
+                plate.classList.add('plate');
+                plate.classList.add('plate-back');
+                if (platedata[i][3] === "red") plate.classList.add('plate-red');
+                else if (platedata[i][3] === "blue") plate.classList.add('plate-blue');
+                else if (platedata[i][3] === "yellow") plate.classList.add('plate-yellow');
+                else if (platedata[i][3] === "green") plate.classList.add('plate-green');
+
+                const name = document.createElement('div');
+                if (platedata[i][1].length > 5) {
+                    name.className = 'name-small';
+                } else {
+                    name.className = 'name';
+                }
+                name.textContent = platedata[i][1];
+                plate.appendChild(name);
+                const rank = document.createElement('div');
+                rank.className = 'rank';
+                rank.textContent = platedata[i][0];
+                plate.appendChild(rank);
+                const affiliation = document.createElement('div');
+                affiliation.className = 'affiliation';
+                affiliation.textContent = platedata[i][2];
+                plate.appendChild(affiliation);
+
+
+
+                const object = new CSS3DObject(plate);
+                object.rotation.x = Math.PI * 1;
+                if (platedata.length == 1) object.position.y = 0;
+                else if (platedata.length == 2) object.position.y = (i * -60 + 30) * vh;
+                else if (platedata.length == 3) object.position.y = (i * -60 + 60) * vh;
+                else if (platedata.length == 4) {
+                    if (i < 2) object.position.x = -60 * vh;
+                    else object.position.x = 60 * vh;
+                    object.position.y = ((i % 2) * -60 + 30) * vh;
+                }
+                else if (platedata.length == 6) {
+                    if (i < 3) object.position.x = -60 * vh;
+                    else object.position.x = 60 * vh;
+                    object.position.y = ((i % 3) * -60 + 60) * vh;
+                }
+                object.scale.x = 0;
+                object.scale.y = 0;
+
+                scene.add(object);
+
+                plate_docs.push(plate);
+                plate_objs.push(object);
+            }
+
+            for (let i = 0; i < plate_objs.length; i++) {
+                const object = plate_objs[i];
+                const a1 = new TWEEN.Tween(object.scale)
+                    .to({ x: 1, y: 1 }, 1000)
+                    .easing(TWEEN.Easing.Cubic.Out);
+                a1.start();
+            }
+
+            new TWEEN.Tween(this)
+                .to({}, 1000 * 2)
+                .onUpdate(render)
+                .start();
+        }
+        function delete_plate() {
+            for (let i = 0; i < plate_objs.length; i++) {
+                const object = plate_objs[i];
+                const a1 = new TWEEN.Tween(object.scale)
+                    .to({ x: 0, y: 0 }, 1000)
+                    .easing(TWEEN.Easing.Cubic.In)
+                    .onComplete(function () {
+                        scene.remove(object);
+                        plate_docs.splice(0);
+                        plate_objs.splice(0);
+                    });
+                a1.start();
+            }
+
+            new TWEEN.Tween(this)
+                .to({}, 1000 * 2)
+                .onUpdate(render)
+                .start();
+        }
+        function flip_plate() {
+            for (let i = 0; i < plate_objs.length; i++) {
+                const object = plate_objs[i];
+                const doc = plate_docs[i];
+                const a1 = new TWEEN.Tween(object.rotation)
+                    .to({ x: object.rotation.x + Math.PI * 0.5 }, 1500)
+                    .easing(TWEEN.Easing.Circular.In
+                    )
+                    .onComplete(function () {
+                        doc.classList.toggle('plate-back');
+                        doc.classList.toggle('plate-front');
+                    });
+                const a2 = new TWEEN.Tween(object.rotation)
+                    .to({ x: object.rotation.x + Math.PI * 1.0 }, 1500)
+                    .easing(TWEEN.Easing.Circular.Out
+                    );
+                a1.chain(a2);
+                a1.start();
+            }
+
+            new TWEEN.Tween(this)
+                .to({}, 1000 * 3)
+                .onUpdate(render)
+                .start();
+        }
+
+        function show_dummy_plate() {
+            show_plate(
+                [
+                    ["1st", "近松門左衛門", "東京特許許可局高校 2年", "red"],
+                    ["2nd", "古寺いろは", "AtCoder株式会社", "blue"],
+                    ["3rd", "皿うどん", "丸亀製麺", "yellow"],
+                    ["4th", "わんこ", "岩手", "green"],
+                    ["5th", "寿司", "海", "green"],
+                    ["6th", "藤原道長", "むかし", "green"],
+                ]
+            );
+        }
+
+        /*
+        document.getElementById('hyoji').addEventListener('click', show_dummy_plate);
+        document.getElementById('del').addEventListener('click', delete_plate);
+        document.getElementById('ura').addEventListener('click', flip_plate);
+        */
+        var clear_count = 0;
+        function prepare_5o2x(playerdata) {
+            clear_count = 0;
+
+            for (let i = 0; i < playerdata.length; i++) {
+                const plate = document.createElement('div');
+                plate.classList.add('card-5o2x');
+                plate.classList.add('card-5o2x-0x');
+                const rank = document.createElement('div');
+                rank.className = 'rank';
+                rank.classList.add('rank-' + playerdata[i][3]);
+                rank.textContent = playerdata[i][0];
+                plate.appendChild(rank);
+
+                /*const affiliation = document.createElement('div');
+                affiliation.className = 'affiliation';
+                affiliation.textContent = playerdata[i][2];
+                plate.appendChild(affiliation);*/
+
+                const name = document.createElement('div');
+                name.className = 'name';
+                if (playerdata[i][1].length == 6) name.classList.add('count-6');
+                else if (playerdata[i][1].length == 5) name.classList.add('count-5');
+                else name.classList.add('count-1-4');
+
+                name.textContent = playerdata[i][1];
+                plate.appendChild(name);
+                /*const rank = document.createElement('div');
+                rank.className = 'rank';
+                rank.textContent = playerdata[i][0];
+                plate.appendChild(rank);
+                const affiliation = document.createElement('div');
+                affiliation.className = 'affiliation';
+                affiliation.textContent = playerdata[i][2];
+                plate.appendChild(affiliation);*/
+
+
+
+                const object = new CSS3DObject(plate);
+
+                object.position.x = (i * 16 - 88) * vw;
+                object.position.y = -vh * 18;
+                object.scale.x = 1;
+                object.scale.y = 0;
+
+                if (playerdata[i][3] === "red") object.Ocount = 3;
+                else if (playerdata[i][3] === "blue") object.Ocount = 2;
+                else if (playerdata[i][3] === "yellow") object.Ocount = 1;
+                else if (playerdata[i][3] === "green") object.Ocount = 0;
+                object.Xcount = 0;
+                plate.style.backgroundImage = `linear-gradient(to top, rgba(90, 255, 255, 0.8) ${object.Ocount * 20}%, rgba(0, 40, 127, 0.2) ${object.Ocount * 20}%)`;
+
+                scene.add(object);
+
+                plate_docs.push(plate);
+                plate_objs.push(object);
+
+                const subplate = document.createElement('div');
+                subplate.className = 'subcard-5o2x';
+                subplate.classList.add('subcard-5o2x-0-3o');
+
+                subplate.textContent = object.Ocount;
+
+                const subobject = new CSS3DObject(subplate);
+                subobject.position.x = (i * 16 - 88) * vw;
+                subobject.position.y = -vh * 73;
+                subobject.scale.x = 1;
+                subobject.scale.y = 0;
+                subobject.rotation.x = 0;
+                scene.add(subobject);
+                subplate_docs.push(subplate);
+                subplate_objs.push(subobject);
+            }
+
+            const mondai = document.createElement('div');
+            mondai.className = 'mondai-5o2x';
+            const q = document.createElement('div');
+            q.textContent = "Q.";
+            q.className = 'q';
+            qarea = document.createElement('div');
+            qarea.className = 'qarea';
+            q.appendChild(qarea);
+            mondai.appendChild(q);
+            const a = document.createElement('div');
+            a.textContent = "A.";
+            a.className = 'a';
+            aarea = document.createElement('div');
+
+            aarea.className = 'aarea';
+            a.appendChild(aarea);
+            mondai.appendChild(a);
+            const mondaiobject = new CSS3DObject(mondai);
+            mondaiobject.position.x = 0;
+            mondaiobject.position.y = vh * 62;
+            mondaiobject.scale.x = 0;
+            mondaiobject.scale.y = 1;
+            scene.add(mondaiobject);
+
+            plate_docs.push(mondai);
+            plate_objs.push(mondaiobject);
+
+            new TWEEN.Tween(mondaiobject.scale)
+                .to({ x: 1, y: 1 }, 1000)
+                .easing(TWEEN.Easing.Cubic.Out)
+                .start();
+
+            for (let i = 0; i < plate_objs.length; i++) {
+                const object = plate_objs[i];
+                const a1 = new TWEEN.Tween(object.scale)
+                    .to({ x: 1, y: 1 }, 1000)
+                    .easing(TWEEN.Easing.Cubic.Out);
+                a1.start();
+            }
+            for (let i = 0; i < subplate_objs.length; i++) {
+                const object = subplate_objs[i];
+                const a1 = new TWEEN.Tween(object.scale)
+                    .to({ x: 1, y: 1 }, 1000)
+                    .easing(TWEEN.Easing.Cubic.Out);
+                a1.start();
+            }
+            new TWEEN.Tween(this)
+                .to({}, 1000 * 2)
+                .onUpdate(render)
+                .start();
+        }
+        function update_5o2x(res, idx, question, answer) {
+            qarea.textContent = question;
+            aarea.textContent = answer;
+            if (res != "through") {
+                const doc = plate_docs[idx];
+                const obj = plate_objs[idx];
+                const doc2 = subplate_docs[idx];
+                const obj2 = subplate_objs[idx];
+                if (res == "correct") {
+                    console.log(obj.Ocount);
+                    const a1 = new TWEEN.Tween(obj).to({ Ocount: obj.Ocount + 1 }, 2000).onUpdate(function () {
+                        doc.style.backgroundImage = `linear-gradient(to top, rgba(90, 255, 255, 0.8) ${obj.Ocount * 20}%, rgba(0, 40, 127, 0.2) ${obj.Ocount * 20}%)`;
+                    }).easing(TWEEN.Easing.Cubic.Out);
+
+
+                    if (obj.Ocount == 4) {
+                        a1.onComplete(function () {
+                            const a2 = new TWEEN.Tween(obj).to({ Ocount: obj.Ocount + 5 }, 1000).onUpdate(function () {
+                                doc.style.backgroundImage = `linear-gradient(to top, rgba(255, 255, 127, 0.5) ${(obj.Ocount - 5) * 20}%, rgba(90, 255, 255, 0.8) ${(obj.Ocount - 5) * 20}%)`;
+                            }).easing(TWEEN.Easing.Cubic.Out).onComplete(function () {
+                                doc.classList.remove('card-5o2x-0x');
+                                doc.classList.remove('card-5o2x-1x');
+                                doc.classList.add('card-5o2x-5o');
+                                const a3 = new TWEEN.Tween(obj2.rotation).to({ x: 0.5 * Math.PI }, 1000).easing(TWEEN.Easing.Circular.In).onComplete(function () {
+                                    doc2.textContent = ["1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th", "11th", "12th"][clear_count];
+                                    clear_count++;
+                                    doc2.classList.remove('subcard-5o2x-0-4o');
+                                    doc2.classList.add('subcard-5o2x-5o');
+                                    obj2.rotation.x = -0.5 * Math.PI;
+                                    new TWEEN.Tween(obj2.rotation).to({ x: 0 }, 1000).easing(TWEEN.Easing.Circular.Out).start();
+                                });
+                                a3.start();
+                            });
+                            a2.start();
+                        });
+                    }
+
+                    const newOcount = obj.Ocount + 1;
+                    const b1 = new TWEEN.Tween(obj2.rotation).to({ x: 0.5 * Math.PI }, 1000).easing(TWEEN.Easing.Circular.In).onComplete(function () {
+                        doc2.textContent = newOcount;
+                        obj2.rotation.x = -0.5 * Math.PI;
+                        const b2 = new TWEEN.Tween(obj2.rotation).to({ x: 0 }, 1000).easing(TWEEN.Easing.Circular.Out);
+
+                        if (newOcount == 4) {
+                            doc2.classList.remove('subcard-5o2x-0-3o');
+                            doc2.classList.add('subcard-5o2x-4o');
+                        }
+                        b2.start();
+                    });
+
+                    a1.start();
+                    b1.start();
+                }
+                else if (res == "wrong") {
+                    if (obj.Xcount == 0) {
+                        // 1Xめ
+                        const batsu = document.createElement('div');
+                        batsu.className = 'batsu';
+                        const object = new CSS3DObject(batsu);
+                        object.position.x = (idx * 16 - 88 - 4) * vw;
+                        object.position.y = -vh * 90;
+                        object.scale.x = 0;
+                        object.scale.y = 0;
+
+                        scene.add(object);
+
+                        plate_docs.push(batsu);
+                        plate_objs.push(object);
+
+                        const a1 = new TWEEN.Tween(object)
+                            .to({ scale: { x: 1, y: 1 }, rotation: { z: Math.PI } }, 1000)
+                            .easing(TWEEN.Easing.Cubic.Out).onComplete(function () {
+                                doc.classList.remove('card-5o2x-0x');
+                                doc.classList.add('card-5o2x-1x');
+                                obj.Xcount = 1;
+                            });
+                        a1.start();
+                        new TWEEN.Tween(this)
+                            .to({}, 1000 * 4)
+                            .onUpdate(render)
+                            .start();
+
+                    }
+                    else {
+                        // 2Xめ
+                        const batsu = document.createElement('div');
+                        batsu.className = 'batsu';
+                        const object = new CSS3DObject(batsu);
+                        object.position.x = (idx * 16 - 88 + 4) * vw;
+                        object.position.y = -vh * 90;
+                        object.scale.x = 0;
+                        object.scale.y = 0;
+
+                        scene.add(object);
+
+                        plate_docs.push(batsu);
+                        plate_objs.push(object);
+
+                        const a1 = new TWEEN.Tween(object)
+                            .to({ scale: { x: 1, y: 1 }, rotation: { z: Math.PI } }, 1000)
+                            .easing(TWEEN.Easing.Cubic.Out).onComplete(function () {
+                                doc.style.backgroundImage = `linear-gradient(to top, rgba(127, 127, 127, 0.8) ${obj.Ocount * 20}%, rgba(0, 40, 127, 0.2) ${obj.Ocount * 20}%)`;
+                                doc.children[0].classList.remove(doc.children[0].classList[1]);
+                                doc.classList.remove('card-5o2x-1x');
+                                doc.classList.add('card-5o2x-2x');
+                                new TWEEN.Tween(obj2.rotation).to({ x: -0.5 * Math.PI }, 700).easing(TWEEN.Easing.Circular.In).onComplete(function () {
+                                    doc2.textContent = "Lose";
+                                    obj2.rotation.x = 0.5 * Math.PI;
+                                    const b2 = new TWEEN.Tween(obj2.rotation).to({ x: 0 }, 700).easing(TWEEN.Easing.Circular.Out);
+
+                                    doc2.classList.remove('subcard-5o2x-0-3o');
+                                    doc2.classList.remove('subcard-5o2x-4o');
+                                    doc2.classList.add('subcard-5o2x-2x');
+                                    b2.start();
+                                }).start();
+                            });
+
+                        a1.start();
+                    }
+                }
+            }
+
+            new TWEEN.Tween(this)
+                .to({}, 1000 * 10)
+                .onUpdate(render)
+                .start();
+        }
+
+        function delete_5o2x() {
+            for (let i = 0; i < plate_objs.length; i++) {
+                const object = plate_objs[i];
+                let sc;
+                if (i > 12) sc = { x: 0, y: 0 };
+                else if (i == 12) sc = { x: 0, y: 1 };
+                else sc = { x: 1, y: 0 };
+                const a1 = new TWEEN.Tween(object.scale)
+                    .to(sc, 1000)
+                    .easing(TWEEN.Easing.Cubic.In)
+                    .onComplete(function () {
+                        scene.remove(object);
+                        plate_docs.splice(0);
+                        plate_objs.splice(0);
+                    });
+                a1.start();
+            }
+            for (let i = 0; i < subplate_objs.length; i++) {
+                const object = subplate_objs[i];
+                const a1 = new TWEEN.Tween(object.scale)
+                    .to({ x: 1, y: 0 }, 1000)
+                    .easing(TWEEN.Easing.Cubic.In)
+                    .onComplete(function () {
+                        scene.remove(object);
+                        subplate_docs.splice(0);
+                        subplate_objs.splice(0);
+                    });
+                a1.start();
+            }
+
+            new TWEEN.Tween(this)
+                .to({}, 1000 * 2)
+                .onUpdate(render)
+                .start();
+        }
+
+        function show_dummy_5o2x() {
+            prepare_5o2x(
+                [
+                    ["1st", "近松門左衛門", "東京特許許可局高校 2年", "red"],
+                    ["2nd", "古寺いろは", "AtCoder株式会社", "blue"],
+                    ["3rd", "皿うどん", "丸亀製麺", "yellow"],
+                    ["4th", "わんこ", "岩手", "green"],
+                    ["5th", "寿司", "海", "green"],
+                    ["6th", "藤原道長", "むかし", "green"],
+                    ["1st", "近松門左衛門", "東京特許許可局高校 2年", "red"],
+                    ["2nd", "古寺いろは", "AtCoder株式会社", "blue"],
+                    ["3rd", "皿うどん", "丸亀製麺", "yellow"],
+                    ["4th", "わんこ", "岩手", "green"],
+                    ["5th", "寿司", "海", "green"],
+                    ["6th", "藤原道長", "むかし", "green"],
+                ]
+            );
+        }
+        function correct_5o2x_mock() {
+            update_5o2x("correct", 2, "日本の「いろは歌」をヒントに、現代英語の重要単語1572語と重要熟語997語を重複することなく560本の英文に凝縮させている、現在英語の授業で我々が使っている単語帳は何でしょう？", "デュオ 3.0 (DUO 3.0)");
+        }
+        function wrong_5o2x_mock() {
+            update_5o2x("wrong", 2, "日本の「いろは歌」をヒントに、現代英語の重要単語1572語と重要熟語997語を重複することなく560本の英文に凝縮させている、現在英語の授業で我々が使っている単語帳は何でしょう？", "デュオ 3.0 (DUO 3.0)");
+        }
+
+
+        //show_dummy_plate();
+        /*document.getElementById('hyoji').addEventListener('click', show_dummy_plate);
+        document.getElementById('add').addEventListener('click', flip_plate);
+        document.getElementById('del').addEventListener('click', delete_plate);*/
+        /*document.getElementById('hyoji').addEventListener('click', show_dummy_5o2x);
+        show_dummy_5o2x();
+        document.getElementById('add').addEventListener('click', correct_5o2x_mock);
+        document.getElementById('sub').addEventListener('click', wrong_5o2x_mock);
+        document.getElementById('del').addEventListener('click', delete_5o2x);*/
+
+        const socket = io();
+        socket.on("show_plate", (...args) => {
+            show_plate(args[0]);
+        });
+        socket.on("delete_plate", (...args) => {
+            delete_plate();
+        });
+        socket.on("flip_plate", (...args) => {
+            flip_plate();
+        });
+        socket.on("prepare_5o2x", (...args) => {
+            prepare_5o2x(args[0]);
+        });
+        socket.on("update_5o2x", (...args) => {
+            console.log(args);
+            update_5o2x(args[0][0], args[0][1], args[0][2], args[0][3]);
+        });
+        socket.on("delete_5o2x", (...args) => {
+            delete_5o2x();
+        });
+
+
+    </script>
+
+    <!--
+        <button id="hyoji" style="position:absolute;">表示</button>
+        <br>
+        <button id="del" style="position:absolute;">けす</button>
+        <br>
+        <button id="ura" style="position:absolute;">うらがえす</button>
+        <button id="hyoji" style="position:absolute;">表示</button>
+        <br>
+        <button id="add" style="position:absolute;">add</button>
+        <br>
+        <button id="sub" style="position:absolute;">sub</button>
+        <br>
+        <button id="del" style="position:absolute;">del</button>
+    -->
+
+
+</body>
+
+</html>
