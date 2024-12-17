@@ -99,6 +99,7 @@ button {
 
 
 .plate-back .rank {
+    position: absolute;    
     font-family: "Aldrich", serif;
     font-size: 33vh;
     color: rgba(255, 255, 255, 0.85);
