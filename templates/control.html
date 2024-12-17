@@ -12,9 +12,9 @@
     <div>
         <blockquote id="message">ここにメッセージが表示されます</blockquote>
 
-        得点管理
+        ペーパー情報管理
         <textarea id="playerdata" rows="3" oninput="init_playerdata()"
-            placeholder="得点情報を入力してください"></textarea>
+            placeholder="参加者名 所属"></textarea>
         問題管理
         <textarea id="quizdata" rows="3" oninput="init_quizdata()" placeholder="問題情報を入力してください"></textarea>
 
@@ -167,7 +167,6 @@
             let res = "2R " + (idx + 1) + "組目のデータを表示します。";
             for (let i = 0; i < 12; i++) {
                 let playerid = i * 4 + idx;
-                let color_japanese;
                 const p = document.getElementById("name" + i);
                 p.textContent = playerdata[playerid][1];
                 const p2 = document.getElementById("panel" + i);

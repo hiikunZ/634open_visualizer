@@ -251,7 +251,7 @@ button {
     transform: translate(-50%, -50%) rotate(-45deg);
 }
 
-.mondai-5o2x {
+.mondai {
     display: flex;
     justify-content: space-between;
     flex-direction: column;
@@ -262,7 +262,7 @@ button {
     box-shadow: 0vw 0vw 0.45vw 0.45vw rgba(255, 255, 255, 0.95);
 }
 
-.mondai-5o2x .q {
+.mondai .q {
     display: flex;
     justify-content: flex-start;
     align-content: space-between;
@@ -275,7 +275,7 @@ button {
     color: rgba(255, 255, 255, 0.95);
 }
 
-.mondai-5o2x .a {
+.mondai .a {
     display: flex;
     justify-content: flex-start;
     align-content: space-between;
@@ -288,10 +288,119 @@ button {
     color: rgba(232, 255, 27, 0.95);
 }
 
-.mondai-5o2x .q .qarea {
+.mondai .q .qarea {
     padding-left: 0.5vw;
 }
 
-.mondai-5o2x .a .aarea {
+.mondai .a .aarea {
     padding-left: 0.5vw;
+}
+
+.card-7o3x {
+    width: 34vw;
+    height: 87vh;
+    text-align: center;
+    line-height: normal;
+    cursor: default;
+}
+
+.card-7o3x-0-1x {
+    box-shadow: 0vw 0vw 0.45vw 0.45vw rgba(0, 180, 255, 0.7);
+}
+
+.card-7o3x-2x {
+    box-shadow: 0vw 0vw 0.45vw 0.45vw rgba(255, 0, 0, 0.7);
+}
+
+.card-7o3x-3x {
+    box-shadow: 0vw 0vw 0.45vw 0.45vw rgba(200, 200, 200, 0.7);
+}
+
+.card-7o3x-7o {
+    box-shadow: 0vw 0vw 0.45vw 0.45vw rgba(255, 255, 0, 0.7);
+}
+
+.card-7o3x .name {
+    padding: 1.5vh 0vh;
+    height: 72vh;
+    display: inline-block;
+    color: rgba(255, 255, 255, 0.95);
+    writing-mode: vertical-rl;
+    text-align-last: justify;
+    white-space: nowrap;
+}
+
+.card-7o3x .count-1-4 {
+    font-size: min(17vh, 9.6vw);
+}
+
+.card-7o3x .count-5 {
+    font-size: min(14.4vh, 9.6vw);
+}
+
+.card-7o3x .count-6 {
+    font-size: 12vh;
+}
+
+.card-7o3x .rank {
+    padding-top: 1vh;
+    font-size: 7vh;
+    font-family: "Aldrich", serif;
+    color: rgba(226, 226, 226, 1);
+}
+
+.card-7o3x .rank-red {
+    text-shadow: 0 0 15px rgba(255, 0, 0, 1.0);
+}
+
+.card-7o3x .rank-blue {
+    text-shadow: 0 0 15px rgba(0, 0, 255, 1.0);
+}
+
+.card-7o3x .rank-yellow {
+    text-shadow: 0 0 15px rgba(255, 255, 0, 1.0);
+}
+
+.card-7o3x .rank-green {
+    text-shadow: 0 0 15px rgba(0, 255, 0, 1.0);
+}
+
+.subcard-7o3x {
+    width: 34vw;
+    height: 15vh;
+    line-height: 16.2vh;
+    text-align: center;
+    cursor: default;
+}
+
+.subcard-7o3x-0-5o {
+    background-color: rgba(165, 204, 255, 0.2);
+    box-shadow: 0vw 0vw 0.45vw 0.45vw rgba(200, 238, 255, 0.7);
+    font-family: "Aldrich", serif;
+    font-size: 12vh;
+    color: rgba(255, 255, 255, 1);
+}
+
+.subcard-7o3x-6o {
+    background-color: rgba(165, 204, 255, 0.2);
+    box-shadow: 0vw 0vw 0.45vw 0.45vw rgba(106, 199, 241, 0.7);
+    font-family: "Aldrich", serif;
+    font-size: 12vh;
+    color: rgba(255, 255, 255, 1);
+}
+
+.subcard-7o3x-7o {
+    background-color: rgba(255, 255, 127, 0.2);
+    box-shadow: 0vw 0vw 0.45vw 0.45vw rgba(255, 255, 0, 0.7);
+    font-family: "Aldrich", serif;
+    font-size: 12vh;
+    color: rgba(255, 255, 255, 1);
+}
+
+.subcard-7o3x-3x {
+    background-color: rgba(139, 139, 139, 0.2);
+    box-shadow: 0vw 0vw 0.45vw 0.45vw rgba(119, 119, 119, 0.7);
+    font-family: "Aldrich", serif;
+    font-size: 12vh;
+    color: rgba(255, 255, 255, 1);
 }

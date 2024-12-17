@@ -19,6 +19,11 @@ def control():
     return render_template("control.html")
 
 
+@app.route("/control2")
+def control2():
+    return render_template("control2.html")
+
+
 @app.route("/api/show_plate", methods=["POST"])
 def show_plate():
     data = request.json["data"]
@@ -55,6 +60,26 @@ def update_5o2x():
 @app.route("/api/delete_5o2x", methods=["POST"])
 def delete_5o2x():
     socketio.emit("delete_5o2x", {})
+    return "OK"
+
+
+@app.route("/api/prepare_7o3x", methods=["POST"])
+def prepare_7o3x():
+    data = request.json["data"]
+    socketio.emit("prepare_7o3x", data)
+    return "OK"
+
+
+@app.route("/api/update_7o3x", methods=["POST"])
+def update_7o3x():
+    data = request.json["data"]
+    socketio.emit("update_7o3x", data)
+    return "OK"
+
+
+@app.route("/api/delete_7o3x", methods=["POST"])
+def delete_7o3x():
+    socketio.emit("delete_7o3x", {})
     return "OK"
 
 
