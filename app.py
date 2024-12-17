@@ -54,7 +54,7 @@ def update_5o2x():
 
 @app.route("/api/delete_5o2x", methods=["POST"])
 def delete_5o2x():
-    socketio.emit("update_5o2x", {})
+    socketio.emit("delete_5o2x", {})
     return "OK"
 
 
