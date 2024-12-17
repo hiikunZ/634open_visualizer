@@ -120,6 +120,7 @@
 
         function init_playerdata() {
             playerdata.length = 0;
+            quiz_cnt = 0;
             rawdata = document.getElementById("playerdata").value;
             rawdata = rawdata.split("\n");
             for (let i = 0; i < rawdata.length; i++) {
