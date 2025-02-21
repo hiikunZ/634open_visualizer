@@ -48,12 +48,12 @@
                 <button type="button" id="o4" class="maru-button">○</button>
                 <button type="button" id="x4" class="batsu-button">✕</button>
             </div>
-            <div>
+            <div id="panel5" class="panel">
                 <p id="name5">なまえ</p>
                 <button type="button" id="o5" class="maru-button">○</button>
                 <button type="button" id="x5" class="batsu-button">✕</button>
             </div>
-            <div>
+            <div id="panel6" class="panel">
                 <p id="name6">なまえ</p>
                 <button type="button" id="o6" class="maru-button">○</button>
                 <button type="button" id="x6" class="batsu-button">✕</button>
@@ -197,7 +197,7 @@
         document.getElementById("prepare_8o3x").addEventListener("click", () => { prepare_8o3x(); });
         document.getElementById("delete_8o3x").addEventListener("click", () => { delete_8o3x(); });
 
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 7; i++) {
             const o = document.getElementById("o" + i);
             o.addEventListener("click", () => { update_8o3x("correct", i); });
             const x = document.getElementById("x" + i);
