@@ -459,15 +459,6 @@ button {
     font-size: 12vh;
     color: rgba(255, 255, 255, 1);
 }
-
-.card-8o3x {
-    width: 25vw;
-    height: 87vh;
-    text-align: center;
-    line-height: normal;
-    cursor: default;
-}
-
 .card-mada {
     box-shadow: 0vw 0vw 0.45vw 0.45vw rgba(0, 180, 255, 0.7);
 }
@@ -483,6 +474,14 @@ button {
 .card-nuke {
     box-shadow: 0vw 0vw 0.45vw 0.45vw rgba(255, 255, 0, 0.7);
 }
+.card-8o3x {
+    width: 25vw;
+    height: 87vh;
+    text-align: center;
+    line-height: normal;
+    cursor: default;
+}
+
 
 .card-8o3x .name {
     padding: 1.5vh 0vh;
@@ -530,6 +529,67 @@ button {
 }
 
 .subcard-8o3x {
+    width: 25vw;
+    height: 15vh;
+    line-height: 16.2vh;
+    text-align: center;
+    cursor: default;
+}
+
+.card-8updown {
+    width: 25vw;
+    height: 87vh;
+    text-align: center;
+    line-height: normal;
+    cursor: default;
+}
+
+.card-8updown .name {
+    padding: 1.5vh 0vh;
+    height: 72vh;
+    display: inline-block;
+    color: rgba(255, 255, 255, 0.95);
+    writing-mode: vertical-rl;
+    text-align-last: justify;
+    white-space: nowrap;
+}
+
+.card-8updown .count-1-4 {
+    font-size: min(17vh, 9.6vw);
+}
+
+.card-8updown .count-5 {
+    font-size: min(14.4vh, 9.6vw);
+}
+
+.card-8updown .count-6 {
+    font-size: 12vh;
+}
+
+.card-8updown .rank {
+    padding-top: 1vh;
+    font-size: 7vh;
+    font-family: "Aldrich", serif;
+    color: rgba(226, 226, 226, 1);
+}
+
+.card-8updown .rank-red {
+    text-shadow: 0 0 15px rgba(255, 0, 0, 1.0);
+}
+
+.card-8updown .rank-blue {
+    text-shadow: 0 0 15px rgba(0, 0, 255, 1.0);
+}
+
+.card-8updown .rank-yellow {
+    text-shadow: 0 0 15px rgba(255, 255, 0, 1.0);
+}
+
+.card-8updown .rank-green {
+    text-shadow: 0 0 15px rgba(0, 255, 0, 1.0);
+}
+
+.subcard-8updown {
     width: 25vw;
     height: 15vh;
     line-height: 16.2vh;

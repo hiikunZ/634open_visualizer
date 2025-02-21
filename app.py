@@ -28,6 +28,9 @@ def control2():
 def control_8o3x():
     return render_template("control_8o3x.html")
 
+@app.route("/control_8updown")
+def control_8updown():
+    return render_template("control_8updown.html")
 
 @app.route("/api/show_plate", methods=["POST"])
 def show_plate():
@@ -117,6 +120,24 @@ def update_8o3x():
 @app.route("/api/delete_8o3x", methods=["POST"])
 def delete_8o3x():
     socketio.emit("delete_8o3x", {})
+    return "OK"
+
+
+@app.route("/api/prepare_8updown", methods=["POST"])
+def prepare_8updown():
+    data = request.json["data"]
+    socketio.emit("prepare_8updown", data)
+    return "OK"
+
+@app.route("/api/update_8updown", methods=["POST"])
+def update_8updown():
+    data = request.json["data"]
+    socketio.emit("update_8updown", data)
+    return "OK"
+
+@app.route("/api/delete_8updown", methods=["POST"])
+def delete_8updown():
+    socketio.emit("delete_8updown", {})
     return "OK"
 
 
