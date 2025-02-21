@@ -24,6 +24,11 @@ def control2():
     return render_template("control2.html")
 
 
+@app.route("/control_8o3x")
+def control_8o3x():
+    return render_template("control_8o3x.html")
+
+
 @app.route("/api/show_plate", methods=["POST"])
 def show_plate():
     data = request.json["data"]
@@ -34,6 +39,18 @@ def show_plate():
 @app.route("/api/flip_plate", methods=["POST"])
 def flip_plate():
     socketio.emit("flip_plate", {})
+    return "OK"
+
+
+@app.route("/api/flip_plate_except_last", methods=["POST"])
+def flip_plate_except_last():
+    socketio.emit("flip_plate_except_last", {})
+    return "OK"
+
+
+@app.route("/api/flip_plate_last", methods=["POST"])
+def flip_plate_last():
+    socketio.emit("flip_plate_last", {})
     return "OK"
 
 
@@ -80,6 +97,26 @@ def update_7o3x():
 @app.route("/api/delete_7o3x", methods=["POST"])
 def delete_7o3x():
     socketio.emit("delete_7o3x", {})
+    return "OK"
+
+
+@app.route("/api/prepare_8o3x", methods=["POST"])
+def prepare_8o3x():
+    data = request.json["data"]
+    socketio.emit("prepare_8o3x", data)
+    return "OK"
+
+
+@app.route("/api/update_8o3x", methods=["POST"])
+def update_8o3x():
+    data = request.json["data"]
+    socketio.emit("update_8o3x", data)
+    return "OK"
+
+
+@app.route("/api/delete_8o3x", methods=["POST"])
+def delete_8o3x():
+    socketio.emit("delete_8o3x", {})
     return "OK"
 
 

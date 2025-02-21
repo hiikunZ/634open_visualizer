@@ -8,6 +8,7 @@
         content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1">
     <link rel="preload" as="font" href="/static/Aldrich-Regular.woff2" crossorigin>
     <link rel="preload" as="font" href="/static/NotoSansJP-Bold.woff2" crossorigin>
+    <link rel="preload" as="font" href="/static/Tektur-Medium.woff2" crossorigin>
 
     <style>
         @font-face {
@@ -26,6 +27,15 @@
             font-display: swap;
             src: url('/static/NotoSansJP-Bold.woff2') format('woff2'),
                 url('/static/NotoSansJP-Bold.woff') format('woff');
+        }
+
+        @font-face {
+            font-family: 'Tektur';
+            font-style: normal;
+            font-weight: 600;
+            font-display: swap;
+            src: url('/static/Tektur-Medium.woff2') format('woff2'),
+                url('/static/Tektur-Medium.woff') format('woff');
         }
     </style>
     <link rel="stylesheet" href="/static/normalize.css" />
@@ -67,8 +77,8 @@
         const plate_objs = [];
         const subplate_docs = [];
         const subplate_objs = [];
-        var qarea, aarea;
-        var clear_count = 0;
+        var qarea, aarea, q_count_area;
+        var clear_count = 0, q_counter = 0;
 
 
         // camera = new THREE.OrthographicCamera(width, -width, height, -height, 0, 1000);
@@ -107,6 +117,7 @@
                 else if (platedata[i][3] === "blue") plate.classList.add('plate-blue');
                 else if (platedata[i][3] === "yellow") plate.classList.add('plate-yellow');
                 else if (platedata[i][3] === "green") plate.classList.add('plate-green');
+                else if (platedata[i][3] === "null") plate.classList.add('plate-null');
 
                 const name = document.createElement('div');
                 if (platedata[i][1].length > 5) {
@@ -143,6 +154,10 @@
                 }
                 object.scale.x = 0;
                 object.scale.y = 0;
+                if (platedata[i][0] == "") {
+                    plate.classList.remove('plate-back');
+                    plate.classList.add('plate-front');
+                }
 
                 scene.add(object);
 
@@ -156,6 +171,29 @@
                     .to({ x: 1, y: 1 }, 1000)
                     .easing(TWEEN.Easing.Cubic.Out);
                 a1.start();
+            }
+
+            if (platedata[0][0] != "1st" && platedata[0][0] != "") {
+                const game_title = document.createElement('div');
+                game_title.className = 'game_title';
+                let kumi = (parseInt(platedata[0][0].substring(0, platedata[0][0].length - 2)) - 1) % 8;
+                if (kumi == 0) kumi = 8;
+                if (kumi > 9 - kumi) kumi = 9 - kumi;
+                game_title.textContent = "2R-" + kumi;
+                const game_title_object = new CSS3DObject(game_title);
+                game_title_object.position.x = 79 * vw;
+                game_title_object.position.y = vh * 85;
+                game_title_object.scale.x = 0;
+                game_title_object.scale.y = 1;
+                scene.add(game_title_object);
+
+                plate_docs.push(game_title);
+                plate_objs.push(game_title_object);
+
+                new TWEEN.Tween(game_title_object.scale)
+                    .to({ x: 1, y: 1 }, 1000)
+                    .easing(TWEEN.Easing.Cubic.Out)
+                    .start();
             }
 
             new TWEEN.Tween(this)
@@ -208,7 +246,58 @@
                 .onUpdate(render)
                 .start();
         }
+        function flip_plate_except_last() {
+            for (let i = 0; i < plate_objs.length; i++) {
+                if (i == 5) continue;
+                const object = plate_objs[i];
+                const doc = plate_docs[i];
+                const a1 = new TWEEN.Tween(object.rotation)
+                    .to({ x: 0.5 * Math.PI }, 1500)
+                    .easing(TWEEN.Easing.Circular.In
+                    )
+                    .onComplete(function () {
+                        object.rotation.x = -0.5 * Math.PI;
+                        doc.classList.toggle('plate-back');
+                        doc.classList.toggle('plate-front');
+                    });
+                const a2 = new TWEEN.Tween(object.rotation)
+                    .to({ x: 0 }, 1500)
+                    .easing(TWEEN.Easing.Circular.Out
+                    );
+                a1.chain(a2);
+                a1.start();
+            }
 
+            new TWEEN.Tween(this)
+                .to({}, 1000 * 3)
+                .onUpdate(render)
+                .start();
+        }
+        function flip_plate_last() {
+            let i = 5;
+            const object = plate_objs[i];
+            const doc = plate_docs[i];
+            const a1 = new TWEEN.Tween(object.rotation)
+                .to({ x: 0.5 * Math.PI }, 1500)
+                .easing(TWEEN.Easing.Circular.In
+                )
+                .onComplete(function () {
+                    object.rotation.x = -0.5 * Math.PI;
+                    doc.classList.toggle('plate-back');
+                    doc.classList.toggle('plate-front');
+                });
+            const a2 = new TWEEN.Tween(object.rotation)
+                .to({ x: 0 }, 1500)
+                .easing(TWEEN.Easing.Circular.Out
+                );
+            a1.chain(a2);
+            a1.start();
+
+            new TWEEN.Tween(this)
+                .to({}, 1000 * 3)
+                .onUpdate(render)
+                .start();
+        }
         function show_dummy_plate() {
             show_plate(
                 [
@@ -229,7 +318,7 @@
         */
         function prepare_5o2x(playerdata) {
             clear_count = 0;
-
+            q_counter = 0;
             for (let i = 0; i < playerdata.length; i++) {
                 const plate = document.createElement('div');
                 plate.classList.add('card-5o2x');
@@ -318,7 +407,7 @@
             a.appendChild(aarea);
             mondai.appendChild(a);
             const mondaiobject = new CSS3DObject(mondai);
-            mondaiobject.position.x = 0;
+            mondaiobject.position.x = -15 * vw;
             mondaiobject.position.y = vh * 62;
             mondaiobject.scale.x = 0;
             mondaiobject.scale.y = 1;
@@ -331,6 +420,59 @@
                 .to({ x: 1, y: 1 }, 1000)
                 .easing(TWEEN.Easing.Cubic.Out)
                 .start();
+
+            const q_count = document.createElement('div');
+            q_count.className = 'q_count';
+
+            const q_count_slash = document.createElement('div');
+            q_count_slash.className = 'q_count_slash';
+            q_count.appendChild(q_count_slash);
+
+            const q_count_main = document.createElement('div');
+            q_count_main.className = 'q_count_main';
+            q_count_main.textContent = "0";
+            q_count.appendChild(q_count_main);
+
+            q_count_area = q_count_main;
+
+            const q_max = document.createElement('div');
+            q_max.className = 'q_max';
+            q_max.textContent = "30";
+            q_count.appendChild(q_max);
+
+            const q_count_object = new CSS3DObject(q_count);
+            q_count_object.position.x = 79 * vw;
+            q_count_object.position.y = vh * 50;
+            q_count_object.scale.x = 0;
+            q_count_object.scale.y = 0;
+            scene.add(q_count_object);
+
+            plate_docs.push(q_count);
+            plate_objs.push(q_count_object);
+
+            new TWEEN.Tween(q_count_object.scale)
+                .to({ x: 1, y: 1 }, 1000)
+                .easing(TWEEN.Easing.Cubic.Out)
+                .start();
+
+            const game_title = document.createElement('div');
+            game_title.className = 'game_title';
+            game_title.textContent = "2R-" + (parseInt(playerdata[0][0][0]) - 1) + "\n5O2X"; // 力技すぎる
+            const game_title_object = new CSS3DObject(game_title);
+            game_title_object.position.x = 79 * vw;
+            game_title_object.position.y = vh * 85;
+            game_title_object.scale.x = 0;
+            game_title_object.scale.y = 1;
+            scene.add(game_title_object);
+
+            plate_docs.push(game_title);
+            plate_objs.push(game_title_object);
+
+            new TWEEN.Tween(game_title_object.scale)
+                .to({ x: 1, y: 1 }, 1000)
+                .easing(TWEEN.Easing.Cubic.Out)
+                .start();
+
 
             for (let i = 0; i < plate_objs.length; i++) {
                 const object = plate_objs[i];
@@ -354,6 +496,8 @@
         function update_5o2x(res, idx, question, answer) {
             qarea.textContent = question;
             aarea.textContent = answer;
+            q_counter++;
+            q_count_area.textContent = q_counter;
             if (res != "through") {
                 const doc = plate_docs[idx];
                 const obj = plate_objs[idx];
@@ -515,6 +659,7 @@
         }
         function prepare_7o3x(playerdata) {
             clear_count = 0;
+            q_counter = 0;
 
             for (let i = 0; i < playerdata.length; i++) {
                 const plate = document.createElement('div');
@@ -605,7 +750,7 @@
             a.appendChild(aarea);
             mondai.appendChild(a);
             const mondaiobject = new CSS3DObject(mondai);
-            mondaiobject.position.x = 0;
+            mondaiobject.position.x = -15 * vw;
             mondaiobject.position.y = vh * 62;
             mondaiobject.scale.x = 0;
             mondaiobject.scale.y = 1;
@@ -615,6 +760,58 @@
             plate_objs.push(mondaiobject);
 
             new TWEEN.Tween(mondaiobject.scale)
+                .to({ x: 1, y: 1 }, 1000)
+                .easing(TWEEN.Easing.Cubic.Out)
+                .start();
+
+            const q_count = document.createElement('div');
+            q_count.className = 'q_count';
+
+            const q_count_slash = document.createElement('div');
+            q_count_slash.className = 'q_count_slash';
+            q_count.appendChild(q_count_slash);
+
+            const q_count_main = document.createElement('div');
+            q_count_main.className = 'q_count_main';
+            q_count_main.textContent = "0";
+            q_count.appendChild(q_count_main);
+
+            q_count_area = q_count_main;
+
+            const q_max = document.createElement('div');
+            q_max.className = 'q_max';
+            q_max.textContent = "30";
+            q_count.appendChild(q_max);
+
+            const q_count_object = new CSS3DObject(q_count);
+            q_count_object.position.x = 79 * vw;
+            q_count_object.position.y = vh * 50;
+            q_count_object.scale.x = 0;
+            q_count_object.scale.y = 0;
+            scene.add(q_count_object);
+
+            plate_docs.push(q_count);
+            plate_objs.push(q_count_object);
+
+            new TWEEN.Tween(q_count_object.scale)
+                .to({ x: 1, y: 1 }, 1000)
+                .easing(TWEEN.Easing.Cubic.Out)
+                .start();
+
+            const game_title = document.createElement('div');
+            game_title.className = 'game_title';
+            game_title.textContent = "7O3X";
+            const game_title_object = new CSS3DObject(game_title);
+            game_title_object.position.x = 79 * vw;
+            game_title_object.position.y = vh * 85;
+            game_title_object.scale.x = 0;
+            game_title_object.scale.y = 1;
+            scene.add(game_title_object);
+
+            plate_docs.push(game_title);
+            plate_objs.push(game_title_object);
+
+            new TWEEN.Tween(game_title_object.scale)
                 .to({ x: 1, y: 1 }, 1000)
                 .easing(TWEEN.Easing.Cubic.Out)
                 .start();
@@ -641,6 +838,8 @@
         function update_7o3x(res, idx, question, answer) {
             qarea.textContent = question;
             aarea.textContent = answer;
+            q_counter++;
+            q_count_area.textContent = q_counter;
             if (res != "through") {
                 const doc = plate_docs[idx];
                 const obj = plate_objs[idx];
@@ -813,7 +1012,7 @@
             );
         }
         function correct_7o3x_mock() {
-            update_7o3x("correct", 2, "日本の「いろは歌」をヒントに、現代英語の重要単語1572語と重要熟語997語を重複することなく560本の英文に凝縮させている、現在英語の授業で我々が使っている単語帳は何でしょう？", "デュオ 3.0 (DUO 3.0)");
+            update_7o3x("correct", 2, "今年度は、宮藤官九郎が作詞を担当した『かわっただけだよ　ヘンじゃない』、俵万智が作詞を担当した『明日（あした）のノート』、緑黄色社会の長屋春子が作詞作曲を担当した『僕らはいきものだから』の3つが課題曲となった合唱コンクールは何でしょう？", "Nコン／NHK全国学校音楽コンクール");
         }
         function wrong_5o2x_mock() {
             update_7o3x("wrong", 2, "日本の「いろは歌」をヒントに、現代英語の重要単語1572語と重要熟語997語を重複することなく560本の英文に凝縮させている、現在英語の授業で我々が使っている単語帳は何でしょう？", "デュオ 3.0 (DUO 3.0)");
@@ -831,6 +1030,8 @@
         document.getElementById('del').addEventListener('click', delete_5o2x);*/
 
         /*show_dummy_7o3x();
+        correct_7o3x_mock();*/
+        /*
         document.getElementById('add').addEventListener('click', correct_7o3x_mock);
         document.getElementById('sub').addEventListener('click', wrong_5o2x_mock);
         document.getElementById('del').addEventListener('click', delete_7o3x);*/
@@ -845,6 +1046,13 @@
         socket.on("flip_plate", (...args) => {
             flip_plate();
         });
+        socket.on("flip_plate_except_last", (...args) => {
+            flip_plate_except_last();
+        });
+        socket.on("flip_plate_last", (...args) => {
+            flip_plate_last();
+        });
+
         socket.on("prepare_5o2x", (...args) => {
             prepare_5o2x(args[0]);
         });

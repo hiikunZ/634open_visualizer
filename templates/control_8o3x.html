@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>得点表示-管理</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/light.css">
+    <link rel="stylesheet" href="/static/control.css" />
+</head>
+
+<body>
+    <div>
+        <blockquote id="message">ここにメッセージが表示されます</blockquote>
+
+        参加者管理
+        <textarea id="playerdata" rows="3" oninput="init_playerdata()" placeholder="ペーパー順位 参加者名 所属"></textarea>
+        問題管理
+        <textarea id="quizdata" rows="3" oninput="init_quizdata()" placeholder="問題情報を入力してください"></textarea>
+
+        <button type="button" id="prepare_8o3x">8o3x開始</button>
+        <button type="button" id="delete_8o3x">8o3x終了</button>
+        <hr>
+
+        <button type="button" id="through">スルー</button>
+        <div class="panels2">
+            <div id="panel0" class="panel">
+                <p id="name0">なまえ</p>
+                <button type="button" id="o0" class="maru-button">○</button>
+                <button type="button" id="x0" class="batsu-button">✕</button>
+            </div>
+            <div id="panel1" class="panel">
+                <p id="name1">なまえ</p>
+                <button type="button" id="o1" class="maru-button">○</button>
+                <button type="button" id="x1" class="batsu-button">✕</button>
+            </div>
+            <div id="panel2" class="panel">
+                <p id="name2">なまえ</p>
+                <button type="button" id="o2" class="maru-button">○</button>
+                <button type="button" id="x2" class="batsu-button">✕</button>
+            </div>
+            <div id="panel3" class="panel">
+                <p id="name3">なまえ</p>
+                <button type="button" id="o3" class="maru-button">○</button>
+                <button type="button" id="x3" class="batsu-button">✕</button>
+            </div>
+            <div id="panel4" class="panel">
+                <p id="name4">なまえ</p>
+                <button type="button" id="o4" class="maru-button">○</button>
+                <button type="button" id="x4" class="batsu-button">✕</button>
+            </div>
+            <div>
+                <p id="name5">なまえ</p>
+                <button type="button" id="o5" class="maru-button">○</button>
+                <button type="button" id="x5" class="batsu-button">✕</button>
+            </div>
+            <div>
+                <p id="name6">なまえ</p>
+                <button type="button" id="o6" class="maru-button">○</button>
+                <button type="button" id="x6" class="batsu-button">✕</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var pr = new Intl.PluralRules("en-US", { type: "ordinal" });
+
+        const suffixes = new Map([
+            ["one", "st"],
+            ["two", "nd"],
+            ["few", "rd"],
+            ["other", "th"],
+        ]);
+        const formatOrdinals = (n) => {
+            const rule = pr.select(n);
+            const suffix = suffixes.get(rule);
+            return `${n}${suffix}`;
+        };
+
+        const playerdata = [];
+
+        const quizdata = [];
+        let show_plate_cnt = 0, quiz_cnt = 0;
+
+        function init_playerdata() {
+            playerdata.length = 0;
+            rawdata = document.getElementById("playerdata").value;
+            rawdata = rawdata.split("\n");
+            let res = "データを初期化しました。<br>";
+
+            for (let i = 0; i < 7; i++) {
+                let data = rawdata[i].split("\t");
+                let rank = parseInt(data[0]);
+                let color;
+                if (rank <= 4) color = "red";
+                else if (rank <= 12) color = "blue";
+                else if (rank <= 24) color = "yellow";
+                else if (rank <= 48) color = "green";
+                /* else if (i == 48) color = "purple";
+                else color = "white"; */ // css で未実装なのであとで
+                playerdata.push([
+                    formatOrdinals(rank),
+                    data[1],
+                    data[2],
+                    color
+                ]);
+                const p = document.getElementById("name" + i);
+                p.textContent = data[1];
+                const p2 = document.getElementById("panel" + i);
+                p2.style.backgroundColor = "color-mix(in srgb,  " + color + " 20%, white";
+                res += "<div style='background-color: color-mix(in srgb,  " + color + " 20%, white);'>" + formatOrdinals(rank) + ": " + data[1] + " (所属: " + data[2] + ")</div>";
+            }
+            const result = document.getElementById("message");
+            result.innerHTML = res;
+        }
+        function init_quizdata() {
+            quizdata.length = 0;
+            quiz_cnt = 0;
+
+            rawdata = document.getElementById("quizdata").value;
+            rawdata = rawdata.split("\n");
+            for (let i = 0; i < rawdata.length; i++) {
+                let data = rawdata[i].split("\t");
+                quizdata.push([
+                    data[0],
+                    data[1],
+                ]);
+            }
+            const result = document.getElementById("message");
+            let res = "データを初期化しました。<br>";
+            res += "次の問題:<br>" + quizdata[0][0] + " (A." + quizdata[0][1] + ")";
+            result.innerHTML = res;
+        }
+
+
+        function prepare_8o3x() {
+            fetch("/api/prepare_8o3x", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ data: playerdata }),
+            })
+                .then((response) => {
+                    const result = document.getElementById("message");
+                    result.innerHTML = "8o3xを開始しました" + "<br>次の問題:<br>" + quizdata[quiz_cnt][0] + " (A." + quizdata[quiz_cnt][1] + ")";
+                })
+                .catch((error) => {
+                    console.error(error);
+                    const result = document.getElementById("message");
+                    result.innerHTML = "失敗しました";
+                });
+        }
+        function delete_8o3x() {
+            fetch("/api/delete_8o3x", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({}),
+            })
+                .then((response) => {
+                    const result = document.getElementById("message");
+                    result.innerHTML = "8o3xを終了しました";
+                })
+                .catch((error) => {
+                    console.error(error);
+                    const result = document.getElementById("message");
+                    result.innerHTML = "失敗しました";
+                });
+        }
+
+        function update_8o3x(status, idx) {
+            const q = quizdata[quiz_cnt][0];
+            const a = quizdata[quiz_cnt][1];
+            quiz_cnt++;
+            fetch("/api/update_8o3x", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    data: [status, idx, q, a],
+                }),
+            })
+                .then((response) => {
+                    const result = document.getElementById("message");
+                    let res = "次の問題:<br>" + quizdata[quiz_cnt][0] + " (A." + quizdata[quiz_cnt][1] + ")";
+                    result.innerHTML = res;
+                })
+                .catch((error) => {
+                    console.error(error);
+                    const result = document.getElementById("message");
+                    result.innerHTML = "失敗しました";
+                });
+        }
+
+        document.getElementById("prepare_8o3x").addEventListener("click", () => { prepare_8o3x(); });
+        document.getElementById("delete_8o3x").addEventListener("click", () => { delete_8o3x(); });
+
+        for (let i = 0; i < 5; i++) {
+            const o = document.getElementById("o" + i);
+            o.addEventListener("click", () => { update_8o3x("correct", i); });
+            const x = document.getElementById("x" + i);
+            x.addEventListener("click", () => { update_8o3x("wrong", i); });
+        }
+        document.getElementById("through").addEventListener("click", () => { update_8o3x("through", -1); });
+
+    </script>
+</body>
+
+</html>
