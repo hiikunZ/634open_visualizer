@@ -32,6 +32,11 @@ def control_8o3x():
 def control_8updown():
     return render_template("control_8updown.html")
 
+
+@app.route("/control_freeze8")
+def control_freeze8():
+    return render_template("control_freeze8.html")
+
 @app.route("/api/show_plate", methods=["POST"])
 def show_plate():
     data = request.json["data"]
@@ -140,6 +145,22 @@ def delete_8updown():
     socketio.emit("delete_8updown", {})
     return "OK"
 
+@app.route("/api/prepare_freeze8", methods=["POST"])
+def prepare_freeze8():
+    data = request.json["data"]
+    socketio.emit("prepare_freeze8", data)
+    return "OK"
+
+@app.route("/api/update_freeze8", methods=["POST"])
+def update_freeze8():
+    data = request.json["data"]
+    socketio.emit("update_freeze8", data)
+    return "OK"
+
+@app.route("/api/delete_freeze8", methods=["POST"])
+def delete_freeze8():
+    socketio.emit("delete_freeze8", {})
+    return "OK"
 
 if __name__ == "__main__":
     socketio.run(app, host="0.0.0.0", port=7000, debug=True)
