@@ -234,6 +234,7 @@
                         object.rotation.x = -0.5 * Math.PI;
                         doc.classList.toggle('plate-back');
                         doc.classList.toggle('plate-front');
+                        run_plate_sound();
                     });
                 const a2 = new TWEEN.Tween(object.rotation)
                     .to({ x: 0 }, 1500)
@@ -261,6 +262,8 @@
                         object.rotation.x = -0.5 * Math.PI;
                         doc.classList.toggle('plate-back');
                         doc.classList.toggle('plate-front');
+                        run_plate_sound();
+
                     });
                 const a2 = new TWEEN.Tween(object.rotation)
                     .to({ x: 0 }, 1500)
@@ -287,6 +290,8 @@
                     object.rotation.x = -0.5 * Math.PI;
                     doc.classList.toggle('plate-back');
                     doc.classList.toggle('plate-front');
+                    run_plate_sound();
+
                 });
             const a2 = new TWEEN.Tween(object.rotation)
                 .to({ x: 0 }, 1500)
@@ -343,6 +348,7 @@
                 a3.start();
             });
             a2.start();
+            run_win_sound();
 
             new TWEEN.Tween(this)
                 .to({}, 1000 * 10)
@@ -560,6 +566,7 @@
                     .easing(TWEEN.Easing.Cubic.Out);
                 a1.start();
             }
+            run_prepare_sound();
             new TWEEN.Tween(this)
                 .to({}, 1000 * 2)
                 .onUpdate(render)
@@ -600,6 +607,7 @@
                                 a3.start();
                             });
                             a2.start();
+                            run_win_sound();
                         });
                     }
 
@@ -618,6 +626,7 @@
 
                     a1.start();
                     b1.start();
+                    run_bar_sound();
                 }
                 else if (res == "wrong") {
                     if (obj.Xcount == 0) {
@@ -640,6 +649,8 @@
                             .easing(TWEEN.Easing.Cubic.Out).onComplete(function () {
                                 doc.classList.remove('card-5o2x-0x');
                                 doc.classList.add('card-5o2x-1x');
+                                run_warn_sound();
+
                                 obj.Xcount = 1;
                             });
                         a1.start();
@@ -647,7 +658,6 @@
                             .to({}, 1000 * 4)
                             .onUpdate(render)
                             .start();
-
                     }
                     else {
                         // 2Xめ
@@ -684,6 +694,8 @@
                             });
 
                         a1.start();
+
+                        run_lose_sound();
                     }
                 }
             }
@@ -984,6 +996,7 @@
                                 if (obj.Xcount == 1) {
                                     doc.classList.remove('card-7o3x-0-1x');
                                     doc.classList.add('card-7o3x-2x');
+                                    run_warn_sound();
                                 }
                                 obj.Xcount += 1;
                             });
@@ -1029,6 +1042,7 @@
                             });
 
                         a1.start();
+                        run_lose_sound();
                     }
                 }
             }
@@ -1243,6 +1257,8 @@
                     .easing(TWEEN.Easing.Cubic.Out);
                 a1.start();
             }
+            run_prepare_sound();
+
             new TWEEN.Tween(this)
                 .to({}, 1000 * 2)
                 .onUpdate(render)
@@ -1283,6 +1299,8 @@
                                 a3.start();
                             });
                             a2.start();
+                            run_win_sound();
+
                         });
                     }
 
@@ -1301,6 +1319,7 @@
 
                     a1.start();
                     b1.start();
+                    run_bar_sound();
                 }
                 else if (res == "wrong") {
                     if (obj.Xcount < 2) {
@@ -1325,6 +1344,7 @@
                                 if (obj.Xcount == 1) {
                                     doc.classList.remove('card-mada');
                                     doc.classList.add('card-sikkaku-ri-ti');
+                                    run_warn_sound();
                                 }
                                 obj.Xcount += 1;
                             });
@@ -1370,6 +1390,7 @@
                             });
 
                         a1.start();
+                        run_lose_sound();
                     }
                 }
             }
@@ -1567,6 +1588,8 @@
                     .easing(TWEEN.Easing.Cubic.Out);
                 a1.start();
             }
+            run_prepare_sound();
+
             new TWEEN.Tween(this)
                 .to({}, 1000 * 2)
                 .onUpdate(render)
@@ -1607,6 +1630,7 @@
                                 a3.start();
                             });
                             a2.start();
+                            run_win_sound();
                         });
                     }
 
@@ -1625,6 +1649,7 @@
 
                     a1.start();
                     b1.start();
+                    run_bar_sound();
                 }
                 else if (res == "wrong") {
                     if (obj.Xcount < 1) {
@@ -1670,6 +1695,7 @@
                             .to({}, 1000 * 4)
                             .onUpdate(render)
                             .start();
+                        run_warn_sound();
                     }
                     else {
                         // 失格
@@ -1706,6 +1732,7 @@
                             });
 
                         a1.start();
+                        run_lose_sound();
                     }
                 }
             }
@@ -1908,6 +1935,8 @@
                     .easing(TWEEN.Easing.Cubic.Out);
                 a1.start();
             }
+            run_prepare_sound();
+
             new TWEEN.Tween(this)
                 .to({}, 1000 * 2)
                 .onUpdate(render)
@@ -1963,6 +1992,7 @@
                                 a3.start();
                             });
                             a2.start();
+                            run_win_sound();
                         });
                     }
 
@@ -1981,6 +2011,7 @@
 
                     a1.start();
                     b1.start();
+                    run_bar_sound();
                 }
                 else if (res == "wrong") {
                     const sn_doc = document.createElement('img');
@@ -2311,6 +2342,8 @@
                     .easing(TWEEN.Easing.Cubic.Out);
                 a1.start();
             }
+            run_prepare_sound();
+
             new TWEEN.Tween(this)
                 .to({}, 1000 * 2)
                 .onUpdate(render)
@@ -2351,6 +2384,7 @@
                                 a3.start();
                             });
                             a2.start();
+                            run_win_sound();
                         });
                     }
 
@@ -2369,6 +2403,7 @@
 
                     a1.start();
                     b1.start();
+                    run_bar_sound();
                 }
                 else if (res == "wrong") {
                     {
@@ -2407,6 +2442,7 @@
                             });
 
                         a1.start();
+                        run_lose_sound();
                     }
                 }
             }
@@ -2606,6 +2642,8 @@
                     .easing(TWEEN.Easing.Cubic.Out);
                 a1.start();
             }
+            run_prepare_sound();
+
             new TWEEN.Tween(this)
                 .to({}, 1000 * 2)
                 .onUpdate(render)
@@ -2637,6 +2675,7 @@
                 });
 
                 b1.start();
+                run_bar_sound();
             }
             new TWEEN.Tween(this)
                 .to({}, 1000 * 10)
@@ -2850,6 +2889,8 @@
                     .easing(TWEEN.Easing.Cubic.Out);
                 a1.start();
             }
+            run_prepare_sound();
+
             new TWEEN.Tween(this)
                 .to({}, 1000 * 2)
                 .onUpdate(render)
@@ -2890,6 +2931,7 @@
                                 a3.start();
                             });
                             a2.start();
+                            run_win_sound();
                         });
                     }
 
@@ -2908,6 +2950,7 @@
 
                     a1.start();
                     b1.start();
+                    run_bar_sound();
                 }
             }
             new TWEEN.Tween(this)
@@ -3110,6 +3153,8 @@
                     .easing(TWEEN.Easing.Cubic.Out);
                 a1.start();
             }
+            run_prepare_sound();
+
             new TWEEN.Tween(this)
                 .to({}, 1000 * 2)
                 .onUpdate(render)
@@ -3150,6 +3195,7 @@
                                 a3.start();
                             });
                             a2.start();
+                            run_win_sound();
                         });
                     }
 
@@ -3168,6 +3214,7 @@
 
                     a1.start();
                     b1.start();
+                    run_bar_sound();
                 }
             }
             new TWEEN.Tween(this)
@@ -3375,12 +3422,72 @@
         <br>
     <button id="add" style="position:absolute;">add</button>
     <br>
-    <button id="sub" style="position:absolute;">sub</button>
-    <br>
-    <button id="del" style="position:absolute;">del</button>
+
 
 -->
+    <button id="oto" style="position:absolute;">音を鳴らす</button>
+    <br>
+    <br>
+    <button id="no_oto" style="position:absolute;">音を鳴らさない</button>
 
+    <script>
+
+        var play_sound = false;
+
+        const prepare_audio = new Audio("/static/prepare.mp3");
+        function run_prepare_sound() {
+            console.log(play_sound);
+            if (play_sound) {
+                prepare_audio.play();
+            }
+        }
+        const bar_audio = new Audio("/static/bar.mp3");
+        function run_bar_sound() {
+            console.log(play_sound);
+            if (play_sound) {
+                bar_audio.play();
+            }
+        }
+        const win_audio = new Audio("/static/win.mp3");
+        function run_win_sound() {
+            console.log(play_sound);
+            if (play_sound) {
+                win_audio.play();
+            }
+        }
+        const lose_audio = new Audio("/static/lose.mp3");
+        function run_lose_sound() {
+            console.log(play_sound);
+            if (play_sound) {
+                lose_audio.play();
+            }
+        }
+        const warn_audio = new Audio("/static/warn.mp3");
+        function run_warn_sound() {
+            console.log(play_sound);
+            if (play_sound) {
+                warn_audio.play();
+            }
+        }
+        const plate_audio = new Audio("/static/plate.mp3");
+        function run_plate_sound() {
+            console.log(play_sound);
+            if (play_sound) {
+                plate_audio.play();
+            }
+        }
+
+
+        document.getElementById('oto').addEventListener('click', () => {
+            play_sound = true;
+            document.getElementById('oto').style.display = 'none';
+            document.getElementById('no_oto').style.display = 'none';
+        });
+        document.getElementById('no_oto').addEventListener('click', () => {
+            document.getElementById('oto').style.display = 'none';
+            document.getElementById('no_oto').style.display = 'none';
+        });
+    </script>
 </body>
 
 </html>
