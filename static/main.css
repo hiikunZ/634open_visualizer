@@ -679,7 +679,7 @@ button {
 
 .subcard-ri-ti {
     background-color: rgba(165, 204, 255, 0.2);
-    box-shadow: 0vw 0vw 0.45vw 0.45vw rgba(106, 199, 241, 0.7);
+    box-shadow: 0vw 0vw 0.6vw 0.6vw rgba(106, 199, 241, 0.7);
     font-family: "Aldrich", serif;
     font-size: 12vh;
     color: rgba(255, 255, 255, 1);
@@ -757,6 +757,74 @@ button {
 
 .subcard-newyork {
     width: 17vw;
+    height: 15vh;
+    line-height: 16.2vh;
+    text-align: center;
+    cursor: default;
+}
+
+.card-sideout {
+    width: 70vw;
+    height: 100vh;
+    text-align: center;
+    line-height: normal;
+    cursor: default;
+}
+
+
+.card-sideout .name {
+    padding: 1.5vh 0vh;
+    height: 72vh;
+    display: inline-block;
+    color: rgba(255, 255, 255, 0.95);
+    writing-mode: vertical-rl;
+    text-align-last: justify;
+    white-space: nowrap;
+}
+
+.card-sideout .count-1-4 {
+    font-size: min(17vh, 9.6vw);
+}
+
+.card-sideout .count-5 {
+    font-size: min(14.4vh, 9.6vw);
+}
+
+.card-sideout .count-6 {
+    font-size: 12vh;
+}
+
+.card-sideout .rank {
+    padding-top: 1vh;
+    font-size: 10vh;
+    font-family: "Aldrich", serif;
+    color: rgba(226, 226, 226, 1);
+}
+
+.card-sideout .rank-red {
+    text-shadow: 0 0 15px rgba(255, 0, 0, 1.0);
+}
+
+.card-sideout .rank-blue {
+    text-shadow: 0 0 15px rgba(0, 0, 255, 1.0);
+}
+
+.card-sideout .rank-yellow {
+    text-shadow: 0 0 15px rgba(255, 255, 0, 1.0);
+}
+
+.card-sideout .rank-green {
+    text-shadow: 0 0 15px rgba(0, 255, 0, 1.0);
+}
+
+.card-sideout .affiliation {
+    padding-bottom: 1vh;
+    font-size: 7vh;
+    color: rgba(226, 226, 226, 1);
+}
+
+.subcard-sideout {
+    width: 70vw;
     height: 15vh;
     line-height: 16.2vh;
     text-align: center;

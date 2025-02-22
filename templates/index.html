@@ -2689,6 +2689,267 @@
                 .onUpdate(render)
                 .start();
         }
+
+
+        function prepare_7sideout(playerdata) {
+            clear_count = 0;
+            q_counter = 0;
+
+            for (let i = 0; i < playerdata.length; i++) {
+                const plate = document.createElement('div');
+                plate.classList.add('card-sideout');
+                plate.classList.add('card-mada');
+                const rank = document.createElement('div');
+                rank.className = 'rank';
+                rank.classList.add('rank-' + playerdata[i][3]);
+                rank.textContent = playerdata[i][0];
+                plate.appendChild(rank);
+
+                const affiliation = document.createElement('div');
+                affiliation.className = 'affiliation';
+                affiliation.textContent = playerdata[i][2];
+                plate.appendChild(affiliation);
+
+                const name = document.createElement('div');
+                name.className = 'name';
+                if (playerdata[i][1].length == 6) name.classList.add('count-6');
+                else if (playerdata[i][1].length == 5) name.classList.add('count-5');
+                else name.classList.add('count-1-4');
+
+                name.textContent = playerdata[i][1];
+                plate.appendChild(name);
+
+                const object = new CSS3DObject(plate);
+
+                object.position.x = (i * 100 - 50) * vw;
+                object.position.y = -vh * 24;
+                object.scale.x = 1;
+                object.scale.y = 0;
+
+                object.Ocount = 0;
+                object.Xcount = 0;
+                plate.style.backgroundImage = `linear-gradient(to top, rgba(90, 255, 255, 0.8) ${object.Ocount * 100 / 7}%, rgba(0, 40, 127, 0.2) ${object.Ocount * 100 / 7}%)`;
+
+                scene.add(object);
+
+                plate_docs.push(plate);
+                plate_objs.push(object);
+
+                const subplate = document.createElement('div');
+                subplate.className = 'subcard-sideout';
+                subplate.classList.add('subcard-mada');
+
+                subplate.textContent = object.Ocount;
+
+                const subobject = new CSS3DObject(subplate);
+                subobject.position.x = (i * 100 - 50) * vw;
+                subobject.position.y = -vh * 86;
+                subobject.scale.x = 1;
+                subobject.scale.y = 0;
+                subobject.rotation.x = 0;
+                scene.add(subobject);
+                subplate_docs.push(subplate);
+                subplate_objs.push(subobject);
+            }
+
+            const mondai = document.createElement('div');
+            mondai.className = 'mondai';
+            const q = document.createElement('div');
+            // q.textContent = "Q.";
+            q.className = 'q';
+            qarea = document.createElement('div');
+            qarea.className = 'qarea';
+            q.appendChild(qarea);
+            mondai.appendChild(q);
+            const a = document.createElement('div');
+            // a.textContent = "A.";
+            a.className = 'a';
+            aarea = document.createElement('div');
+
+            aarea.className = 'aarea';
+            a.appendChild(aarea);
+            mondai.appendChild(a);
+            const mondaiobject = new CSS3DObject(mondai);
+            mondaiobject.position.x = -15 * vw;
+            mondaiobject.position.y = vh * 62;
+            mondaiobject.scale.x = 0;
+            mondaiobject.scale.y = 1;
+            scene.add(mondaiobject);
+
+            plate_docs.push(mondai);
+            plate_objs.push(mondaiobject);
+
+            new TWEEN.Tween(mondaiobject.scale)
+                .to({ x: 1, y: 1 }, 1000)
+                .easing(TWEEN.Easing.Cubic.Out)
+                .start();
+
+            const q_count = document.createElement('div');
+            q_count.className = 'q_count';
+
+            const q_count_slash = document.createElement('div');
+            q_count_slash.className = 'q_count_slash';
+            q_count.appendChild(q_count_slash);
+
+            const q_count_main = document.createElement('div');
+            q_count_main.className = 'q_count_main';
+            q_count_main.textContent = "0";
+            q_count.appendChild(q_count_main);
+
+            q_count_area = q_count_main;
+
+            const q_max = document.createElement('div');
+            q_max.className = 'q_max';
+            q_max.textContent = "50";
+            q_count.appendChild(q_max);
+
+            const q_count_object = new CSS3DObject(q_count);
+            q_count_object.position.x = 79 * vw;
+            q_count_object.position.y = vh * 50;
+            q_count_object.scale.x = 0;
+            q_count_object.scale.y = 0;
+            scene.add(q_count_object);
+
+            plate_docs.push(q_count);
+            plate_objs.push(q_count_object);
+
+            new TWEEN.Tween(q_count_object.scale)
+                .to({ x: 1, y: 1 }, 1000)
+                .easing(TWEEN.Easing.Cubic.Out)
+                .start();
+
+            const game_title = document.createElement('div');
+            game_title.className = 'game_title';
+            game_title.innerHTML = "F-1<br>7 side out";
+            const game_title_object = new CSS3DObject(game_title);
+            game_title_object.position.x = 79 * vw;
+            game_title_object.position.y = vh * 85;
+            game_title_object.scale.x = 0;
+            game_title_object.scale.y = 1;
+            scene.add(game_title_object);
+
+            plate_docs.push(game_title);
+            plate_objs.push(game_title_object);
+
+            new TWEEN.Tween(game_title_object.scale)
+                .to({ x: 1, y: 1 }, 1000)
+                .easing(TWEEN.Easing.Cubic.Out)
+                .start();
+
+            for (let i = 0; i < plate_objs.length; i++) {
+                const object = plate_objs[i];
+                const a1 = new TWEEN.Tween(object.scale)
+                    .to({ x: 1, y: 1 }, 1000)
+                    .easing(TWEEN.Easing.Cubic.Out);
+                a1.start();
+            }
+            for (let i = 0; i < subplate_objs.length; i++) {
+                const object = subplate_objs[i];
+                const a1 = new TWEEN.Tween(object.scale)
+                    .to({ x: 1, y: 1 }, 1000)
+                    .easing(TWEEN.Easing.Cubic.Out);
+                a1.start();
+            }
+            new TWEEN.Tween(this)
+                .to({}, 1000 * 2)
+                .onUpdate(render)
+                .start();
+        }
+        function update_7sideout(res, idx, question, answer) {
+            qarea.textContent = question;
+            aarea.textContent = answer;
+            q_counter++;
+            q_count_area.textContent = q_counter;
+            if (res != "through") {
+                const doc = plate_docs[idx];
+                const obj = plate_objs[idx];
+                const doc2 = subplate_docs[idx];
+                const obj2 = subplate_objs[idx];
+                if (res == "correct") {
+                    const a1 = new TWEEN.Tween(obj).to({ Ocount: obj.Ocount + 1 }, 2000).onUpdate(function () {
+                        doc.style.backgroundImage = `linear-gradient(to top, rgba(90, 255, 255, 0.8) ${100 - (7 - obj.Ocount) * 100 / 7}%, rgba(0, 40, 127, 0.2) ${100 - (7 - obj.Ocount) * 100 / 7}%)`;
+                    }).easing(TWEEN.Easing.Cubic.Out);
+
+
+                    if (obj.Ocount == 6) {
+                        a1.onComplete(function () {
+                            const a2 = new TWEEN.Tween(obj).to({ Ocount: obj.Ocount + 7 }, 1000).onUpdate(function () {
+                                doc.style.backgroundImage = `linear-gradient(to top, rgba(255, 255, 127, 0.5) ${(obj.Ocount - 7) * 100 / 7}%, rgba(90, 255, 255, 0.8) ${(obj.Ocount - 7) * 100 / 7}%)`;
+                            }).easing(TWEEN.Easing.Cubic.Out).onComplete(function () {
+                                doc.classList.remove('card-mada');
+                                doc.classList.remove('card-sikkaku-ri-ti');
+                                doc.classList.add('card-nuke');
+                                const a3 = new TWEEN.Tween(obj2.rotation).to({ x: 0.5 * Math.PI }, 1000).easing(TWEEN.Easing.Circular.In).onComplete(function () {
+                                    doc2.textContent = ["1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th", "11th", "12th"][clear_count];
+                                    clear_count++;
+                                    doc2.classList.remove('subcard-mada');
+                                    doc2.classList.add('subcard-nuke');
+                                    obj2.rotation.x = -0.5 * Math.PI;
+                                    new TWEEN.Tween(obj2.rotation).to({ x: 0 }, 1000).easing(TWEEN.Easing.Circular.Out).start();
+                                });
+                                a3.start();
+                            });
+                            a2.start();
+                        });
+                    }
+
+                    const newOcount = obj.Ocount + 1;
+                    const b1 = new TWEEN.Tween(obj2.rotation).to({ x: 0.5 * Math.PI }, 1000).easing(TWEEN.Easing.Circular.In).onComplete(function () {
+                        doc2.textContent = newOcount;
+                        obj2.rotation.x = -0.5 * Math.PI;
+                        const b2 = new TWEEN.Tween(obj2.rotation).to({ x: 0 }, 1000).easing(TWEEN.Easing.Circular.Out);
+
+                        if (newOcount == 6) {
+                            doc2.classList.remove('subcard-mada');
+                            doc2.classList.add('subcard-ri-ti');
+                        }
+                        b2.start();
+                    });
+
+                    a1.start();
+                    b1.start();
+                }
+            }
+            new TWEEN.Tween(this)
+                .to({}, 1000 * 10)
+                .onUpdate(render)
+                .start();
+        }
+        function delete_7sideout() {
+            for (let i = 0; i < plate_objs.length; i++) {
+                const object = plate_objs[i];
+                let sc;
+                if (i > 2) sc = { x: 0, y: 0 };
+                else if (i == 2) sc = { x: 0, y: 1 };
+                else sc = { x: 1, y: 0 };
+                const a1 = new TWEEN.Tween(object.scale)
+                    .to(sc, 1000)
+                    .easing(TWEEN.Easing.Cubic.In)
+                    .onComplete(function () {
+                        scene.remove(object);
+                        plate_docs.splice(0);
+                        plate_objs.splice(0);
+                    });
+                a1.start();
+            }
+            for (let i = 0; i < subplate_objs.length; i++) {
+                const object = subplate_objs[i];
+                const a1 = new TWEEN.Tween(object.scale)
+                    .to({ x: 1, y: 0 }, 1000)
+                    .easing(TWEEN.Easing.Cubic.In)
+                    .onComplete(function () {
+                        scene.remove(object);
+                        subplate_docs.splice(0);
+                        subplate_objs.splice(0);
+                    });
+                a1.start();
+            }
+
+            new TWEEN.Tween(this)
+                .to({}, 1000 * 2)
+                .onUpdate(render)
+                .start();
+        }
         /*function show_dummy_8o3x() {
             prepare_8o3x(
                 [
@@ -2813,6 +3074,17 @@
         socket.on("delete_newyork", (...args) => {
             delete_newyork();
         });
+
+        socket.on("prepare_7sideout", (...args) => {
+            prepare_7sideout(args[0]);
+        });
+        socket.on("update_7sideout", (...args) => {
+            update_7sideout(args[0][0], args[0][1], args[0][2], args[0][3]);
+        });
+        socket.on("delete_7sideout", (...args) => {
+            delete_7sideout();
+        });
+
         socket.on("force_win", (...args) => {
             force_win(args[0]);
         });

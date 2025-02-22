@@ -48,6 +48,9 @@ def control_5o1x():
 def control_newyork():
     return render_template("control_newyork.html")
 
+@app.route("/control_7sideout")
+def control_7sideout():
+    return render_template("control_7sideout.html")
 
 @app.route("/api/show_plate", methods=["POST"])
 def show_plate():
@@ -237,6 +240,23 @@ def switch_newyork():
 @app.route("/api/delete_newyork", methods=["POST"])
 def delete_newyork():
     socketio.emit("delete_newyork", {})
+    return "OK"
+
+@app.route("/api/prepare_7sideout", methods=["POST"])
+def prepare_7sideout():
+    data = request.json["data"]
+    socketio.emit("prepare_7sideout", data)
+    return "OK"
+
+@app.route("/api/update_7sideout", methods=["POST"])
+def update_7sideout():
+    data = request.json["data"]
+    socketio.emit("update_7sideout", data)
+    return "OK"
+
+@app.route("/api/delete_7sideout", methods=["POST"])
+def delete_7sideout():
+    socketio.emit("delete_7sideout", {})
     return "OK"
 
 
