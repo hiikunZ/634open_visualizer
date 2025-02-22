@@ -79,7 +79,7 @@
         const subplate_docs = [];
         const subplate_objs = [];
         const snow_objs = [];
-        var qarea, aarea, q_count_area;
+        var qarea, aarea, q_count_area, game_title_area;
         var clear_count = 0, q_counter = 0;
 
 
@@ -326,7 +326,7 @@
             const obj2 = subplate_objs[idx];
             obj.Anim = 0
             const a2 = new TWEEN.Tween(obj).to({ Anim: 1 }, 1000).onUpdate(function () {
-                doc.style.backgroundImage = `linear-gradient(to top, rgba(255, 255, 127, 0.5) ${(obj.Anim) * 100 / 1}%, rgba(90, 255, 255, 0.8) ${(obj.Anim) * 100 / 1}%)`;
+                doc.style.backgroundImage = `linear-gradient(to top, rgba(255, 255, 127, 0.5) ${(obj.Anim) * 100 / 1}%, rgba(0, 40, 127, 0.2) ${(obj.Anim) * 100 / 1}%)`;
             }).easing(TWEEN.Easing.Cubic.Out).onComplete(function () {
                 doc.classList.remove('card-mada');
                 doc.classList.remove('.card-sikkaku-ri-ti');
@@ -356,6 +356,7 @@
             const obj2 = subplate_objs[idx];
             doc.style.backgroundImage = doc.style.backgroundImage.replace("rgba(90, 255, 255, 0.8)", "rgba(127, 127, 127, 0.8)")
             doc.children[0].classList.remove(doc.children[0].classList[1]);
+            doc.classList.remove('card-mada');
             doc.classList.remove('card-sikkaku-ri-ti');
             doc.classList.add('card-sikkaku');
             new TWEEN.Tween(obj2.rotation).to({ x: 0.5 * Math.PI }, 700).easing(TWEEN.Easing.Circular.In).onComplete(function () {
@@ -369,6 +370,19 @@
                 b2.start();
             }).start();
 
+            new TWEEN.Tween(this)
+                .to({}, 1000 * 10)
+                .onUpdate(render)
+                .start();
+        }
+        function force_erase(idx) {
+            const doc = plate_docs[idx];
+            const obj = plate_objs[idx];
+            const doc2 = subplate_docs[idx];
+            const obj2 = subplate_objs[idx];
+
+            new TWEEN.Tween(obj.scale).to({ x: 1, y: 0 }, 1000).easing(TWEEN.Easing.Cubic.In).start();
+            new TWEEN.Tween(obj2.scale).to({ x: 1, y: 0 }, 1000).easing(TWEEN.Easing.Cubic.In).start();
             new TWEEN.Tween(this)
                 .to({}, 1000 * 10)
                 .onUpdate(render)
@@ -1368,8 +1382,8 @@
             for (let i = 0; i < plate_objs.length; i++) {
                 const object = plate_objs[i];
                 let sc;
-                if (i > 5) sc = { x: 0, y: 0 };
-                else if (i == 5) sc = { x: 0, y: 1 };
+                if (i > 7) sc = { x: 0, y: 0 };
+                else if (i == 7) sc = { x: 0, y: 1 };
                 else sc = { x: 1, y: 0 };
                 const a1 = new TWEEN.Tween(object.scale)
                     .to(sc, 1000)
@@ -1704,8 +1718,8 @@
             for (let i = 0; i < plate_objs.length; i++) {
                 const object = plate_objs[i];
                 let sc;
-                if (i > 5) sc = { x: 0, y: 0 };
-                else if (i == 5) sc = { x: 0, y: 1 };
+                if (i > 7) sc = { x: 0, y: 0 };
+                else if (i == 7) sc = { x: 0, y: 1 };
                 else sc = { x: 1, y: 0 };
                 const a1 = new TWEEN.Tween(object.scale)
                     .to(sc, 1000)
@@ -2081,8 +2095,8 @@
             for (let i = 0; i < plate_objs.length; i++) {
                 const object = plate_objs[i];
                 let sc;
-                if (i > 5) sc = { x: 0, y: 0 };
-                else if (i == 5) sc = { x: 0, y: 1 };
+                if (i > 7) sc = { x: 0, y: 0 };
+                else if (i == 7) sc = { x: 0, y: 1 };
                 else sc = { x: 1, y: 0 };
                 const a1 = new TWEEN.Tween(object.scale)
                     .to(sc, 1000)
@@ -2407,8 +2421,8 @@
             for (let i = 0; i < plate_objs.length; i++) {
                 const object = plate_objs[i];
                 let sc;
-                if (i > 12) sc = { x: 0, y: 0 };
-                else if (i == 12) sc = { x: 0, y: 1 };
+                if (i > subplate_objs.length) sc = { x: 0, y: 0 };
+                else if (i == subplate_objs.length) sc = { x: 0, y: 1 };
                 else sc = { x: 1, y: 0 };
                 const a1 = new TWEEN.Tween(object.scale)
                     .to(sc, 1000)
@@ -2438,7 +2452,243 @@
                 .onUpdate(render)
                 .start();
         }
+        function prepare_newyork(playerdata) {
+            clear_count = 0;
+            q_counter = 0;
 
+            for (let i = 0; i < playerdata.length; i++) {
+                const plate = document.createElement('div');
+                plate.classList.add('card-newyork');
+                plate.classList.add('card-mada');
+                const rank = document.createElement('div');
+                rank.className = 'rank';
+                rank.classList.add('rank-' + playerdata[i][3]);
+                rank.textContent = playerdata[i][0];
+                plate.appendChild(rank);
+
+                const name = document.createElement('div');
+                name.className = 'name';
+                if (playerdata[i][1].length == 6) name.classList.add('count-6');
+                else if (playerdata[i][1].length == 5) name.classList.add('count-5');
+                else name.classList.add('count-1-4');
+
+                name.textContent = playerdata[i][1];
+                plate.appendChild(name);
+
+                const object = new CSS3DObject(plate);
+
+                object.position.x = (i * 19 - 85.5) * vw;
+                object.position.y = -vh * 18;
+                object.scale.x = 1;
+                object.scale.y = 0;
+
+                object.Score = 0;
+                plate.style.backgroundImage = `rgba(0, 40, 127, 0.2)`;
+
+                scene.add(object);
+
+                plate_docs.push(plate);
+                plate_objs.push(object);
+
+                const subplate = document.createElement('div');
+                subplate.className = 'subcard-newyork';
+                subplate.classList.add('subcard-mada');
+
+                subplate.textContent = object.Score;
+
+                const subobject = new CSS3DObject(subplate);
+                subobject.position.x = (i * 19 - 85.5) * vw;
+                subobject.position.y = -vh * 73;
+                subobject.scale.x = 1;
+                subobject.scale.y = 0;
+                subobject.rotation.x = 0;
+                scene.add(subobject);
+                subplate_docs.push(subplate);
+                subplate_objs.push(subobject);
+            }
+
+            const mondai = document.createElement('div');
+            mondai.className = 'mondai';
+            const q = document.createElement('div');
+            // q.textContent = "Q.";
+            q.className = 'q';
+            qarea = document.createElement('div');
+            qarea.className = 'qarea';
+            q.appendChild(qarea);
+            mondai.appendChild(q);
+            const a = document.createElement('div');
+            // a.textContent = "A.";
+            a.className = 'a';
+            aarea = document.createElement('div');
+
+            aarea.className = 'aarea';
+            a.appendChild(aarea);
+            mondai.appendChild(a);
+            const mondaiobject = new CSS3DObject(mondai);
+            mondaiobject.position.x = -15 * vw;
+            mondaiobject.position.y = vh * 62;
+            mondaiobject.scale.x = 0;
+            mondaiobject.scale.y = 1;
+            scene.add(mondaiobject);
+
+            plate_docs.push(mondai);
+            plate_objs.push(mondaiobject);
+
+            new TWEEN.Tween(mondaiobject.scale)
+                .to({ x: 1, y: 1 }, 1000)
+                .easing(TWEEN.Easing.Cubic.Out)
+                .start();
+
+            const q_count = document.createElement('div');
+            q_count.className = 'q_count';
+
+            const q_count_slash = document.createElement('div');
+            q_count_slash.className = 'q_count_slash';
+            q_count.appendChild(q_count_slash);
+
+            const q_count_main = document.createElement('div');
+            q_count_main.className = 'q_count_main';
+            q_count_main.textContent = "0";
+            q_count.appendChild(q_count_main);
+
+            q_count_area = q_count_main;
+
+            const q_max = document.createElement('div');
+            q_max.className = 'q_max';
+            q_max.textContent = "50";
+            q_count.appendChild(q_max);
+
+            const q_count_object = new CSS3DObject(q_count);
+            q_count_object.position.x = 79 * vw;
+            q_count_object.position.y = vh * 50;
+            q_count_object.scale.x = 0;
+            q_count_object.scale.y = 0;
+            scene.add(q_count_object);
+
+            plate_docs.push(q_count);
+            plate_objs.push(q_count_object);
+
+            new TWEEN.Tween(q_count_object.scale)
+                .to({ x: 1, y: 1 }, 1000)
+                .easing(TWEEN.Easing.Cubic.Out)
+                .start();
+
+            const game_title = document.createElement('div');
+            game_title.className = 'game_title';
+            game_title.innerHTML = "SF-1<br>NY +1/-1";
+            const game_title_object = new CSS3DObject(game_title);
+            game_title_object.position.x = 79 * vw;
+            game_title_object.position.y = vh * 85;
+            game_title_object.scale.x = 0;
+            game_title_object.scale.y = 1;
+            scene.add(game_title_object);
+
+            plate_docs.push(game_title);
+            plate_objs.push(game_title_object);
+            game_title_area = game_title;
+
+            new TWEEN.Tween(game_title_object.scale)
+                .to({ x: 1, y: 1 }, 1000)
+                .easing(TWEEN.Easing.Cubic.Out)
+                .start();
+
+            for (let i = 0; i < plate_objs.length; i++) {
+                const object = plate_objs[i];
+                const a1 = new TWEEN.Tween(object.scale)
+                    .to({ x: 1, y: 1 }, 1000)
+                    .easing(TWEEN.Easing.Cubic.Out);
+                a1.start();
+            }
+            for (let i = 0; i < subplate_objs.length; i++) {
+                const object = subplate_objs[i];
+                const a1 = new TWEEN.Tween(object.scale)
+                    .to({ x: 1, y: 1 }, 1000)
+                    .easing(TWEEN.Easing.Cubic.Out);
+                a1.start();
+            }
+            new TWEEN.Tween(this)
+                .to({}, 1000 * 2)
+                .onUpdate(render)
+                .start();
+        }
+        function update_newyork(res, idx, question, answer) {
+            qarea.textContent = question;
+            aarea.textContent = answer;
+            q_counter++;
+            q_count_area.textContent = q_counter;
+            let phase = 1;
+            if (game_title_area.innerHTML == "SF-2<br>NY +2/-2") phase = 2;
+
+            if (res != "through") {
+                const doc = plate_docs[idx];
+                const obj = plate_objs[idx];
+                const doc2 = subplate_docs[idx];
+                const obj2 = subplate_objs[idx];
+                var newScore = obj.Score;
+                if (res == "correct") newScore += phase;
+                else if (res == "wrong") newScore -= phase;
+                obj.Score = newScore;
+
+                const b1 = new TWEEN.Tween(obj2.rotation).to({ x: 0.5 * Math.PI }, 1000).easing(TWEEN.Easing.Circular.In).onComplete(function () {
+                    doc2.textContent = newScore;
+                    obj2.rotation.x = -0.5 * Math.PI;
+                    const b2 = new TWEEN.Tween(obj2.rotation).to({ x: 0 }, 1000).easing(TWEEN.Easing.Circular.Out);
+                    b2.start();
+                });
+
+                b1.start();
+            }
+            new TWEEN.Tween(this)
+                .to({}, 1000 * 10)
+                .onUpdate(render)
+                .start();
+        }
+        function switch_newyork() {
+            for (let i = 0; i < 10; i++) {
+                const doc = plate_docs[i];
+                if (!doc.classList.contains('card-mada')) {
+                    force_erase(i);
+                }
+            }
+            game_title_area.innerHTML = "SF-2<br>NY +2/-2";
+            q_counter = 0;
+            q_count_area.textContent = q_counter;
+        }
+        function delete_newyork() {
+            for (let i = 0; i < plate_objs.length; i++) {
+                const object = plate_objs[i];
+                let sc;
+                if (i > 9) sc = { x: 0, y: 0 };
+                else if (i == 9) sc = { x: 0, y: 1 };
+                else sc = { x: 1, y: 0 };
+                const a1 = new TWEEN.Tween(object.scale)
+                    .to(sc, 1000)
+                    .easing(TWEEN.Easing.Cubic.In)
+                    .onComplete(function () {
+                        scene.remove(object);
+                        plate_docs.splice(0);
+                        plate_objs.splice(0);
+                    });
+                a1.start();
+            }
+            for (let i = 0; i < subplate_objs.length; i++) {
+                const object = subplate_objs[i];
+                const a1 = new TWEEN.Tween(object.scale)
+                    .to({ x: 1, y: 0 }, 1000)
+                    .easing(TWEEN.Easing.Cubic.In)
+                    .onComplete(function () {
+                        scene.remove(object);
+                        subplate_docs.splice(0);
+                        subplate_objs.splice(0);
+                    });
+                a1.start();
+            }
+
+            new TWEEN.Tween(this)
+                .to({}, 1000 * 2)
+                .onUpdate(render)
+                .start();
+        }
         /*function show_dummy_8o3x() {
             prepare_8o3x(
                 [
@@ -2550,10 +2800,22 @@
         socket.on("delete_5o1x", (...args) => {
             delete_5o1x();
         });
+
+        socket.on("prepare_newyork", (...args) => {
+            prepare_newyork(args[0]);
+        });
+        socket.on("update_newyork", (...args) => {
+            update_newyork(args[0][0], args[0][1], args[0][2], args[0][3]);
+        });
+        socket.on("switch_newyork", (...args) => {
+            switch_newyork();
+        });
+        socket.on("delete_newyork", (...args) => {
+            delete_newyork();
+        });
         socket.on("force_win", (...args) => {
             force_win(args[0]);
         });
-
         socket.on("force_lose", (...args) => {
             force_lose(args[0]);
         });

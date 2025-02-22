@@ -28,6 +28,7 @@ def control2():
 def control_8o3x():
     return render_template("control_8o3x.html")
 
+
 @app.route("/control_8updown")
 def control_8updown():
     return render_template("control_8updown.html")
@@ -37,9 +38,16 @@ def control_8updown():
 def control_freeze8():
     return render_template("control_freeze8.html")
 
+
 @app.route("/control_5o1x")
 def control_5o1x():
     return render_template("control_5o1x.html")
+
+
+@app.route("/control_newyork")
+def control_newyork():
+    return render_template("control_newyork.html")
+
 
 @app.route("/api/show_plate", methods=["POST"])
 def show_plate():
@@ -65,11 +73,13 @@ def flip_plate_last():
     socketio.emit("flip_plate_last", {})
     return "OK"
 
+
 @app.route("/api/force_win", methods=["POST"])
 def force_win():
     data = request.json["data"]
     socketio.emit("force_win", data)
     return "OK"
+
 
 @app.route("/api/force_lose", methods=["POST"])
 def force_lose():
@@ -150,16 +160,19 @@ def prepare_8updown():
     socketio.emit("prepare_8updown", data)
     return "OK"
 
+
 @app.route("/api/update_8updown", methods=["POST"])
 def update_8updown():
     data = request.json["data"]
     socketio.emit("update_8updown", data)
     return "OK"
 
+
 @app.route("/api/delete_8updown", methods=["POST"])
 def delete_8updown():
     socketio.emit("delete_8updown", {})
     return "OK"
+
 
 @app.route("/api/prepare_freeze8", methods=["POST"])
 def prepare_freeze8():
@@ -167,16 +180,19 @@ def prepare_freeze8():
     socketio.emit("prepare_freeze8", data)
     return "OK"
 
+
 @app.route("/api/update_freeze8", methods=["POST"])
 def update_freeze8():
     data = request.json["data"]
     socketio.emit("update_freeze8", data)
     return "OK"
 
+
 @app.route("/api/delete_freeze8", methods=["POST"])
 def delete_freeze8():
     socketio.emit("delete_freeze8", {})
     return "OK"
+
 
 @app.route("/api/prepare_5o1x", methods=["POST"])
 def prepare_5o1x():
@@ -184,16 +200,45 @@ def prepare_5o1x():
     socketio.emit("prepare_5o1x", data)
     return "OK"
 
+
 @app.route("/api/update_5o1x", methods=["POST"])
 def update_5o1x():
     data = request.json["data"]
     socketio.emit("update_5o1x", data)
     return "OK"
 
+
 @app.route("/api/delete_5o1x", methods=["POST"])
 def delete_5o1x():
     socketio.emit("delete_5o1x", {})
     return "OK"
+
+
+@app.route("/api/prepare_newyork", methods=["POST"])
+def prepare_newyork():
+    data = request.json["data"]
+    socketio.emit("prepare_newyork", data)
+    return "OK"
+
+
+@app.route("/api/update_newyork", methods=["POST"])
+def update_newyork():
+    data = request.json["data"]
+    socketio.emit("update_newyork", data)
+    return "OK"
+
+
+@app.route("/api/switch_newyork", methods=["POST"])
+def switch_newyork():
+    socketio.emit("switch_newyork", {})
+    return "OK"
+
+
+@app.route("/api/delete_newyork", methods=["POST"])
+def delete_newyork():
+    socketio.emit("delete_newyork", {})
+    return "OK"
+
 
 if __name__ == "__main__":
     socketio.run(app, host="0.0.0.0", port=7000, debug=True)

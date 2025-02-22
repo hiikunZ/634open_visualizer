@@ -81,10 +81,10 @@
                 let data = rawdata[i].split("\t");
                 let rank = parseInt(data[0]);
                 let color;
-                if (rank <= 4) color = "red";
-                else if (rank <= 12) color = "blue";
-                else if (rank <= 24) color = "yellow";
-                else if (rank <= 48) color = "green";
+                if (i < 5) color = "red";
+                else if (i < 13) color = "blue";
+                else if (i < 25) color = "yellow";
+                else if (i < 49) color = "green";
                 /* else if (i == 48) color = "purple";
                 else color = "white"; */ // css で未実装なのであとで
                 playerdata.push([
