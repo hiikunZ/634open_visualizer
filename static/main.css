@@ -285,7 +285,7 @@ button {
     justify-content: flex-start;
     align-content: space-between;
     flex-wrap: nowrap;
-    padding-left: 2vw;
+    padding-left: 1vw;
     padding-right: 1vw;
     padding-bottom: 1vw;
     font-size: 9vh;
