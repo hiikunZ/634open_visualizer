@@ -19,9 +19,9 @@ blockquote {
 
 .panel {
     display: flex;
-    flex-wrap: nowrap;
-    flex-direction: column;
-    justify-content: space-between;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: flex-start;
     width: 14%;
     font-weight: bold;
     padding-left: 1%;
@@ -39,6 +39,20 @@ blockquote {
 .batsu-button {
     background-color: rgb(127, 127, 255);
     width: 90%;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.win-button {
+    background-color: rgb(255, 255, 127);
+    width: 42%;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.lose-button {
+    background-color: rgb(200, 200, 200);
+    width: 42%;
     padding-left: 0;
     padding-right: 0;
 }

@@ -27,36 +27,50 @@
                 <p id="name0">なまえ</p>
                 <button type="button" id="o0" class="maru-button">○</button>
                 <button type="button" id="x0" class="batsu-button">✕</button>
+                <button type="button" id="w0" class="win-button">勝</button>
+                <button type="button" id="l0" class="lose-button">負</button>
             </div>
             <div id="panel1" class="panel">
                 <p id="name1">なまえ</p>
                 <button type="button" id="o1" class="maru-button">○</button>
                 <button type="button" id="x1" class="batsu-button">✕</button>
+                <button type="button" id="w1" class="win-button">勝</button>
+                <button type="button" id="l1" class="lose-button">負</button>
             </div>
             <div id="panel2" class="panel">
                 <p id="name2">なまえ</p>
                 <button type="button" id="o2" class="maru-button">○</button>
                 <button type="button" id="x2" class="batsu-button">✕</button>
+                <button type="button" id="w2" class="win-button">勝</button>
+                <button type="button" id="l2" class="lose-button">負</button>
             </div>
             <div id="panel3" class="panel">
                 <p id="name3">なまえ</p>
                 <button type="button" id="o3" class="maru-button">○</button>
                 <button type="button" id="x3" class="batsu-button">✕</button>
+                <button type="button" id="w3" class="win-button">勝</button>
+                <button type="button" id="l3" class="lose-button">負</button>
             </div>
             <div id="panel4" class="panel">
                 <p id="name4">なまえ</p>
                 <button type="button" id="o4" class="maru-button">○</button>
                 <button type="button" id="x4" class="batsu-button">✕</button>
+                <button type="button" id="w4" class="win-button">勝</button>
+                <button type="button" id="l4" class="lose-button">負</button>
             </div>
             <div id="panel5" class="panel">
                 <p id="name5">なまえ</p>
                 <button type="button" id="o5" class="maru-button">○</button>
                 <button type="button" id="x5" class="batsu-button">✕</button>
+                <button type="button" id="w5" class="win-button">勝</button>
+                <button type="button" id="l5" class="lose-button">負</button>
             </div>
             <div id="panel6" class="panel">
                 <p id="name6">なまえ</p>
                 <button type="button" id="o6" class="maru-button">○</button>
                 <button type="button" id="x6" class="batsu-button">✕</button>
+                <button type="button" id="w6" class="win-button">勝</button>
+                <button type="button" id="l6" class="lose-button">負</button>
             </div>
         </div>
     </div>
@@ -193,7 +207,56 @@
                     result.innerHTML = "失敗しました";
                 });
         }
+        function force_win(idx) {
+            const playername = document.getElementById("name" + idx).textContent;
+            if (!confirm(playername + "を勝ち判定にしますか？")) {
+                return;
+            }
+            fetch("/api/force_win", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    data: idx,
+                }),
+            })
+                .then((response) => {
+                    const result = document.getElementById("message");
+                    result.innerHTML = "勝ち判定にしました";
+                })
+                .catch((error) => {
+                    console.error(error);
+                    const result = document.getElementById("message");
+                    result.innerHTML = "失敗しました";
+                });
+        }
 
+        function force_lose(idx) {
+            const playername = document.getElementById("name" + idx).textContent;
+
+            if (!confirm(playername + "を負け判定にしますか？")) {
+                return;
+            }
+            fetch("/api/force_lose", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    data: idx,
+                }),
+            })
+                .then((response) => {
+                    const result = document.getElementById("message");
+                    result.innerHTML = "負け判定にしました";
+                })
+                .catch((error) => {
+                    console.error(error);
+                    const result = document.getElementById("message");
+                    result.innerHTML = "失敗しました";
+                });
+        }
         document.getElementById("prepare_8o3x").addEventListener("click", () => { prepare_8o3x(); });
         document.getElementById("delete_8o3x").addEventListener("click", () => { delete_8o3x(); });
 
@@ -202,6 +265,10 @@
             o.addEventListener("click", () => { update_8o3x("correct", i); });
             const x = document.getElementById("x" + i);
             x.addEventListener("click", () => { update_8o3x("wrong", i); });
+            const w = document.getElementById("w" + i);
+            w.addEventListener("click", () => { force_win(i); });
+            const l = document.getElementById("l" + i);
+            l.addEventListener("click", () => { force_lose(i); });
         }
         document.getElementById("through").addEventListener("click", () => { update_8o3x("through", -1); });
 

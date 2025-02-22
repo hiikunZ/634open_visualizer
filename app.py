@@ -61,6 +61,18 @@ def flip_plate_last():
     socketio.emit("flip_plate_last", {})
     return "OK"
 
+@app.route("/api/force_win", methods=["POST"])
+def force_win():
+    data = request.json["data"]
+    socketio.emit("force_win", data)
+    return "OK"
+
+@app.route("/api/force_lose", methods=["POST"])
+def force_lose():
+    data = request.json["data"]
+    socketio.emit("force_lose", data)
+    return "OK"
+
 
 @app.route("/api/delete_plate", methods=["POST"])
 def delete_plate():

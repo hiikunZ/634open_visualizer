@@ -318,6 +318,62 @@
         document.getElementById('del').addEventListener('click', delete_plate);
         document.getElementById('ura').addEventListener('click', flip_plate);
         */
+
+        function force_win(idx) {
+            const doc = plate_docs[idx];
+            const obj = plate_objs[idx];
+            const doc2 = subplate_docs[idx];
+            const obj2 = subplate_objs[idx];
+            obj.Anim = 0
+            const a2 = new TWEEN.Tween(obj).to({ Anim: 1 }, 1000).onUpdate(function () {
+                doc.style.backgroundImage = `linear-gradient(to top, rgba(255, 255, 127, 0.5) ${(obj.Anim) * 100 / 1}%, rgba(90, 255, 255, 0.8) ${(obj.Anim) * 100 / 1}%)`;
+            }).easing(TWEEN.Easing.Cubic.Out).onComplete(function () {
+                doc.classList.remove('card-mada');
+                doc.classList.remove('.card-sikkaku-ri-ti');
+                doc.classList.add('card-nuke');
+                const a3 = new TWEEN.Tween(obj2.rotation).to({ x: 0.5 * Math.PI }, 1000).easing(TWEEN.Easing.Circular.In).onComplete(function () {
+                    doc2.textContent = ["1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th", "11th", "12th"][clear_count];
+                    clear_count++;
+                    doc2.classList.remove('subcard-mada');
+                    doc2.classList.remove('subcard-ri-ti');
+                    doc2.classList.add('subcard-nuke');
+                    obj2.rotation.x = -0.5 * Math.PI;
+                    new TWEEN.Tween(obj2.rotation).to({ x: 0 }, 1000).easing(TWEEN.Easing.Circular.Out).start();
+                });
+                a3.start();
+            });
+            a2.start();
+
+            new TWEEN.Tween(this)
+                .to({}, 1000 * 10)
+                .onUpdate(render)
+                .start();
+        }
+        function force_lose(idx) {
+            const doc = plate_docs[idx];
+            const obj = plate_objs[idx];
+            const doc2 = subplate_docs[idx];
+            const obj2 = subplate_objs[idx];
+            doc.style.backgroundImage = doc.style.backgroundImage.replace("rgba(90, 255, 255, 0.8)", "rgba(127, 127, 127, 0.8)")
+            doc.children[0].classList.remove(doc.children[0].classList[1]);
+            doc.classList.remove('card-sikkaku-ri-ti');
+            doc.classList.add('card-sikkaku');
+            new TWEEN.Tween(obj2.rotation).to({ x: 0.5 * Math.PI }, 700).easing(TWEEN.Easing.Circular.In).onComplete(function () {
+                doc2.textContent = "Lose";
+                obj2.rotation.x = -0.5 * Math.PI;
+                const b2 = new TWEEN.Tween(obj2.rotation).to({ x: 0 }, 700).easing(TWEEN.Easing.Circular.Out);
+
+                doc2.classList.remove('subcard-mada');
+                doc2.classList.remove('subcard-ri-ti');
+                doc2.classList.add('subcard-sikkaku');
+                b2.start();
+            }).start();
+
+            new TWEEN.Tween(this)
+                .to({}, 1000 * 10)
+                .onUpdate(render)
+                .start();
+        }
         function prepare_5o2x(playerdata) {
             clear_count = 0;
             q_counter = 0;
@@ -1929,7 +1985,7 @@
                         sn_obj.scale.x = 0.6;
                         sn_obj.scale.y = 0.6;
                     }
-                    
+
                     scene.add(sn_obj);
 
                     for (let i = 0; i < snow_docs[idx].length; i++) {
@@ -2050,6 +2106,20 @@
                     });
                 a1.start();
             }
+            for (let i = 0; i < snow_objs.length; i++) {
+                for (let j = 0; j < snow_objs[i].length; j++) {
+                    const object = snow_objs[i][j];
+                    const a1 = new TWEEN.Tween(object.scale)
+                        .to({ x: 0, y: 0 }, 1000)
+                        .easing(TWEEN.Easing.Cubic.In)
+                        .onComplete(function () {
+                            scene.remove(object);
+                            snow_docs[i].splice(0);
+                            snow_objs[i].splice(0);
+                        });
+                    a1.start();
+                }
+            }
 
             new TWEEN.Tween(this)
                 .to({}, 1000 * 2)
@@ -2157,6 +2227,14 @@
         });
         socket.on("delete_freeze8", (...args) => {
             delete_freeze8();
+        });
+
+        socket.on("force_win", (...args) => {
+            force_win(args[0]);
+        });
+
+        socket.on("force_lose", (...args) => {
+            force_lose(args[0]);
         });
 
     </script>
